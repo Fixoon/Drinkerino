@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/glassImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:cropToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/list_drink_glass" />
+
+    <LinearLayout
+        android:id="@+id/drinkInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/likePicture"
+        app:layout_constraintStart_toEndOf="@+id/glassImage"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/drinkName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/list_drink_name"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/drinkProps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/list_drink_properties"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/likePicture"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:adjustViewBounds="false"
+        android:contentDescription="@string/list_drink_outlined_heart"
+        android:cropToPadding="false"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_heart_outline"
+        />
+
+</android.support.constraint.ConstraintLayout>

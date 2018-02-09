@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Drinkerino</string>
+    <string name="title_home">Start</string>
+    <string name="title_settings">Inställningar</string>
+    <string name="title_liked">Gillade</string>
+
+    <string name="drink_ingredients">Ingridienser</string>
+    <string name="drink_instructions">Instruktioner</string>
+    <string name="drink_name">Drinknamn</string>
+
+    <string name="filter_header">Filtrera drinkar</string>
+    <string name="filter_properties">Egenskaper</string>
+    <string name="filter_base_spirit">Drinkbas</string>
+    <string name="filter_cancel_button">Avbryt</string>
+    <string name="filter_filter_button">Filtrera</string>
+
+    <string name="no_liked_drinks_warning">Du har inte gillat några drinkar</string>
+    <string name="no_matched_drinks_warning">Inga drinkar matchade din filtrering</string>
+
+    <string name="list_drink_name">Name</string>
+    <string name="list_drink_properties">Properties</string>
+    <string name="list_drink_outlined_heart">Outlined heart</string>
+    <string name="list_drink_glass">Drinkglas</string>
+
+    <string name="snackbar_drink_removed">borttagen</string>
+    <string name="snackbar_drink_undo">Ångra</string>
+</resources>

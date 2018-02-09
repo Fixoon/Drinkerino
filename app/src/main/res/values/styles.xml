@@ -1,0 +1,10 @@
+<resources>
+
+    <!-- Base application theme. -->
+
+    <style name="CustomDarkTheme" parent="Theme.AppCompat.Light.DarkActionBar" >
+
+        <item name="colorAccent">@color/heart_red</item>
+    </style>
+
+</resources>
