@@ -1,4 +1,4 @@
-package com.example.oskar.drinkerino
+package com.example.oskar.drinkerino.enums
 
 enum class DrinkGlass (val glassID:Int) {
     LOWBALL(0),

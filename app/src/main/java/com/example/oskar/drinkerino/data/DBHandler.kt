@@ -1,9 +1,12 @@
-package com.example.oskar.drinkerino
+package com.example.oskar.drinkerino.data
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.oskar.drinkerino.enums.DrinkGlass
+import com.example.oskar.drinkerino.enums.LikeState
+import com.example.oskar.drinkerino.objects.*
 import java.util.*
 
 
@@ -75,8 +78,8 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
 
 
         addRecipeToDB(Drink("Mojito", "Rom", arrayOf("Rom", "Mynta", "Sodavatten"), arrayOf("6 cl", "3 blad", "10 cl"), arrayOf("Söt"), arrayOf("Muddlare"), "Skär en lime i klyftor~ Lägg lime, mynta och socker i ett glas~ Muddla allt i glaset några gånger~ Fyll glaset med krossad is~ Häll i rom och sodavatten~ Blanda om försiktigt", DrinkGlass.LOWBALL), db)
-        addRecipeToDB(Drink("Cuba Libre","Rom", arrayOf("Rom", "Cola"), arrayOf("5 cl", "12 cl"), arrayOf("Söt"), arrayOf(), "Fyll ett glas med isbitar~ Häll i rom och cola~ Blanda om", DrinkGlass.HIGHBALL), db)
-        addRecipeToDB(Drink("Gin & Tonic", "Gin", arrayOf("Gin", "Tonic"), arrayOf("6 cl", "10 cl"), arrayOf("Besk"), arrayOf(), "Häll i gin och tonic i ett glas~ Blanda om",DrinkGlass.HIGHBALL), db)
+        addRecipeToDB(Drink("Cuba Libre", "Rom", arrayOf("Rom", "Cola"), arrayOf("5 cl", "12 cl"), arrayOf("Söt"), arrayOf(), "Fyll ett glas med isbitar~ Häll i rom och cola~ Blanda om", DrinkGlass.HIGHBALL), db)
+        addRecipeToDB(Drink("Gin & Tonic", "Gin", arrayOf("Gin", "Tonic"), arrayOf("6 cl", "10 cl"), arrayOf("Besk"), arrayOf(), "Häll i gin och tonic i ett glas~ Blanda om", DrinkGlass.HIGHBALL), db)
         addRecipeToDB(Drink("Jack & Cola", "Whiskey", arrayOf("Jack Daniels", "Cola"), arrayOf("6 cl", "10 cl"), arrayOf("Söt"), arrayOf(), "Häll i Jack Daniels och cola i ett glas~ Blanda om", DrinkGlass.HIGHBALL), db)
         addRecipeToDB(Drink("Black Russian", "Vodka", arrayOf("Vodka", "Kahlua"), arrayOf("5 cl", "2 cl"), arrayOf("Söt"), arrayOf(), "Häll i vodka och Kahlua i ett glas~ Blanda om", DrinkGlass.LOWBALL), db)
         addRecipeToDB(Drink("White Russian", "Vodka", arrayOf("Vodka", "Kahlua", "Mjölk"), arrayOf("5 cl", "2 cl", "3 cl"), arrayOf("Söt"), arrayOf(), "Häll i vodka, Kahlua och grädde i ett glas~ Blanda om", DrinkGlass.LOWBALL), db)
@@ -231,7 +234,8 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
 
         var drinkName = ""
         var baseSpirit = ""
-        var drinkGlass:DrinkGlass = DrinkGlass.LOWBALL
+        var drinkGlass: DrinkGlass = DrinkGlass.LOWBALL
+        var likeState: LikeState = LikeState.IGNORE
         var ingredients = arrayOf<String>()
         var measurements = arrayOf<String>()
         var property = arrayOf<String>()
@@ -239,7 +243,7 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         var instructions = ""
 
         val selectionArgs = arrayOf(id, id, id, id, id, id)
-        val query = "SELECT Drinks.DrinkName, Drinks.BaseSpirit, Drinks.DrinkGlass, " +
+        val query = "SELECT Drinks.DrinkName, Drinks.BaseSpirit, Drinks.DrinkGlass, Drinks.IsLiked, " +
                 "(SELECT GROUP_CONCAT(Ingredients.IngredientName, '~') FROM Measurements INNER JOIN Ingredients ON " +
                 "Measurements.IngredientID=Ingredients.IngredientID WHERE Measurements.DrinkID = ?), " +
                 "(SELECT GROUP_CONCAT(Measurements.Measurement, '~') FROM Measurements WHERE Measurements.DrinkID = ?), " +
@@ -257,11 +261,12 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
                 drinkName = cursor.getString(0)
                 baseSpirit = cursor.getString(1)
                 drinkGlass = DrinkGlass.fromInt(cursor.getInt(2))!!
-                ingredients = cursor.getString(3).split("~".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                measurements = cursor.getString(4).split("~".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                property = cursor.getString(5).split("~".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                tools = cursor.getString(6).split("~".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                instructions = cursor.getString(7)
+                likeState = LikeState.fromInt(cursor.getInt(3))!!
+                ingredients = cursor.getString(4).split("~".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                measurements = cursor.getString(5).split("~".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                property = cursor.getString(6).split("~".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                tools = cursor.getString(7).split("~".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                instructions = cursor.getString(8)
             } while (cursor.moveToNext())
 
         }
@@ -269,13 +274,13 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         cursor.close()
         db.close()
 
-        return Drink(drinkName, baseSpirit, ingredients, measurements, property, tools, instructions, drinkGlass)
+        return Drink(drinkName, baseSpirit, ingredients, measurements, property, tools, instructions, drinkGlass, likeState)
     }
 
     /**
      * Get drinks as an ArrayList with optional filter
      */
-    fun getDrinksByFilter(isLiked: LikeState, filter:FilterObject? = null): ArrayList<SimpleDrink>
+    fun getDrinksByFilter(isLiked: LikeState, filter: FilterObject? = null): ArrayList<SimpleDrink>
     {
         val db = this.readableDatabase
         val drinkList = ArrayList<SimpleDrink>()

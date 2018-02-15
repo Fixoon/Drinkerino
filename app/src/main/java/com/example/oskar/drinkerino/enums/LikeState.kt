@@ -1,4 +1,4 @@
-package com.example.oskar.drinkerino
+package com.example.oskar.drinkerino.enums
 
 enum class LikeState(val boolInt:Int?) {
     LIKED(1),
