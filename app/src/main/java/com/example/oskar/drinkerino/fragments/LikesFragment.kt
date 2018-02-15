@@ -22,7 +22,7 @@ import java.util.*
 
 
 class LikesFragment : Fragment(), OnLikeClick {
-    lateinit var adapter: DrinkAdapter
+    private lateinit var adapter: DrinkAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -32,7 +32,7 @@ class LikesFragment : Fragment(), OnLikeClick {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var drinkList = getDrinksFromDB(LikeState.LIKED)
+        val drinkList = getDrinksFromDB(LikeState.LIKED)
         initializeListView(drinkList)
         toggleText()
     }
@@ -44,7 +44,7 @@ class LikesFragment : Fragment(), OnLikeClick {
      * @param retView Drinks main View
      */
     override fun likeToggle(position: Int, retView:View){
-        var drink: SimpleDrink = adapter.getItem(position)
+        val drink: SimpleDrink = adapter.getItem(position)
         val db = DBHandler(context)
 
         db.setLikeState(drink.drinkID, LikeState.NOT_LIKED)

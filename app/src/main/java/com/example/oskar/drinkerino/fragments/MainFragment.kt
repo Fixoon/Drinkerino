@@ -127,7 +127,7 @@ class MainFragment : Fragment(), OnLikeClick {
         val propertyViewList:Array<LinearLayout> = arrayOf(filterDialog.propertyLayoutLeft, filterDialog.propertyLayoutRight)
         val ingredientViewList:Array<LinearLayout> = arrayOf(filterDialog.drinkBaseLayoutLeft, filterDialog.drinkBaseLayoutRight)
 
-        var filter = FilterObject(getCheckedBoxes(propertyViewList),
+        val filter = FilterObject(getCheckedBoxes(propertyViewList),
                 getCheckedBoxes(ingredientViewList),
                 (filterDialog.drinkBaseLayoutRight.getChildAt(2) as CheckBox).isChecked)
 
@@ -140,7 +140,7 @@ class MainFragment : Fragment(), OnLikeClick {
      * @param parentViews Parent views of checkboxes
      */
     private fun getCheckedBoxes(parentViews:Array<LinearLayout>) : ArrayList<String>{
-        var checkedBoxes:ArrayList<String> = arrayListOf()
+        val checkedBoxes:ArrayList<String> = arrayListOf()
 
         parentViews.forEachIndexed{ index, l ->
             (0 until l.childCount)

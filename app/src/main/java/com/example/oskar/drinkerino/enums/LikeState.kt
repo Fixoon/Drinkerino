@@ -6,7 +6,7 @@ enum class LikeState(val boolInt:Int?) {
     IGNORE(null);
 
     companion object {
-        private val map = LikeState.values().associateBy(LikeState::boolInt);
+        private val map = LikeState.values().associateBy(LikeState::boolInt)
         fun fromInt(type: Int) = map[type]
     }
 }

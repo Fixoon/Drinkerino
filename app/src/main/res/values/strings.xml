@@ -24,4 +24,6 @@
 
     <string name="snackbar_drink_removed">borttagen</string>
     <string name="snackbar_drink_undo">Ångra</string>
+    <string name="menu_filter">Filtrera</string>
+    <string name="menu_like">Gilla</string>
 </resources>

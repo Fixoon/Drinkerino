@@ -7,9 +7,6 @@ import android.view.Window
 import android.widget.CheckBox
 import kotlinx.android.synthetic.main.custom_dialog.*
 
-/**
- * Created by Oskar on 2017-11-02.
- */
 class FilterDialog(private val propertiesList:Array<String>, private val ingredientsList:Array<String>, private val activity:Activity) : Dialog(activity) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

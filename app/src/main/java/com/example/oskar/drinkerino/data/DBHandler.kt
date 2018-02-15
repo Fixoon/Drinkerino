@@ -199,7 +199,11 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
 
         cursor?.moveToFirst()
 
-        return cursor!!.getInt(0)
+        val returnVal = cursor!!.getInt(0)
+
+        cursor.close()
+
+        return returnVal
     }
 
     private fun getPropertyIDByName(property: String, db: SQLiteDatabase): Int {
@@ -212,7 +216,11 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
 
         cursor?.moveToFirst()
 
-        return cursor!!.getInt(0)
+        val returnVal = cursor!!.getInt(0)
+
+        cursor.close()
+
+        return returnVal
     }
 
     private fun getToolIDByName(tool: String, db: SQLiteDatabase): Int {
@@ -225,12 +233,16 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
 
         cursor?.moveToFirst()
 
-        return cursor!!.getInt(0)
+        val returnVal = cursor!!.getInt(0)
+
+        cursor.close()
+
+        return returnVal
     }
 
     fun getFullRecipe(id: Int): Drink {
         val db = this.readableDatabase
-        val id = id.toString()
+        val idString = id.toString()
 
         var drinkName = ""
         var baseSpirit = ""
@@ -239,10 +251,10 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         var ingredients = arrayOf<String>()
         var measurements = arrayOf<String>()
         var property = arrayOf<String>()
-        var tools:Array<String> = arrayOf<String>()
+        var tools:Array<String> = arrayOf()
         var instructions = ""
 
-        val selectionArgs = arrayOf(id, id, id, id, id, id)
+        val selectionArgs = arrayOf(idString, idString, idString, idString, idString, idString)
         val query = "SELECT Drinks.DrinkName, Drinks.BaseSpirit, Drinks.DrinkGlass, Drinks.IsLiked, " +
                 "(SELECT GROUP_CONCAT(Ingredients.IngredientName, '~') FROM Measurements INNER JOIN Ingredients ON " +
                 "Measurements.IngredientID=Ingredients.IngredientID WHERE Measurements.DrinkID = ?), " +
@@ -285,10 +297,10 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         val db = this.readableDatabase
         val drinkList = ArrayList<SimpleDrink>()
 
-        var searchProps:String = ""
-        var searchIngredients:String = ""
-        var searchLikes:String = ""
-        var other:String = ")"
+        var searchProps = ""
+        var searchIngredients = ""
+        var searchLikes = ""
+        var other = ")"
 
 
         if(filter != null){
@@ -311,8 +323,8 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
                 "GROUP_CONCAT(DISTINCT Properties.Property) " +
                 "FROM Drinks INNER JOIN DrinkProps ON Drinks.DrinkID=DrinkProps.DrinkID " +
                 "INNER JOIN Properties ON DrinkProps.PropertyID=Properties.PropertyID " +
-                "WHERE 1=1 " + searchProps + searchIngredients + searchLikes + " GROUP BY Drinks.DrinkID";
-        val cursor = db.rawQuery(query, null);
+                "WHERE 1=1 " + searchProps + searchIngredients + searchLikes + " GROUP BY Drinks.DrinkID"
+        val cursor = db.rawQuery(query, null)
 
         if (cursor.moveToFirst()) {
             do {
@@ -334,19 +346,17 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
      */
     fun setLikeState(id: Int, likeState: LikeState){
         val db = this.writableDatabase
-        val id = id.toString()
+        val idString = id.toString()
 
-        var vals = ContentValues()
-        vals.put("IsLiked", likeState.boolInt)
-        db.update("Drinks", vals, "DrinkID=?", arrayOf(id))
+        val values = ContentValues()
+        values.put("IsLiked", likeState.boolInt)
+        db.update("Drinks", values, "DrinkID=?", arrayOf(idString))
 
         db.close()
     }
 
     companion object {
-        // Database Version
         private val DATABASE_VERSION = 1
-        // Database Name
         private val DATABASE_NAME = "Drinks"
     }
 }

@@ -6,7 +6,7 @@ enum class DrinkGlass (val glassID:Int) {
     FLUTE(3);
 
     companion object {
-        private val map = DrinkGlass.values().associateBy(DrinkGlass::glassID);
+        private val map = DrinkGlass.values().associateBy(DrinkGlass::glassID)
         fun fromInt(type: Int) = map[type]
     }
 }

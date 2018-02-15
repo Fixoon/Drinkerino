@@ -4,6 +4,6 @@
     <item
         android:id="@+id/action_filter"
         android:icon="@drawable/ic_menu_filter"
-        android:title="Filtrera"
+        android:title="@string/menu_filter"
         app:showAsAction="ifRoom"/>
 </menu>
