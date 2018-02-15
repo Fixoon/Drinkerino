@@ -1,14 +1,14 @@
 # Drinkerino
 
-This Android app was created for fun and to learn. It's my first time using Kotlin but not first time developing in Android.
+This Android app was created for fun and for me to learn. It's my first time using Kotlin but not first time developing in Android.
 
-Drinkerino is about drink recipes. The app has a few features but not a lot. The app is very basic.
+Drinkerino is about drink recipes. The app has a few features but not a lot. It's very basic.
 
-Name is just something random.
+The name "Drinkerino" is nothing serious.
 
-There is a lot that could be done better and I might update the app from time to time. 
+There is a lot that could be done better and I might update the app if I feel like it. 
 
-Not too happy about the database solution. It's the first time using SQLite and I'd rather have the original database on file than creating it in the app on first run.
+I'm not too happy about the database solution. It's the first time using SQLite and I'd rather have the database on file than creating it in the app on first run.
 
 Don't take the recipes seriously. I haven't tested any of them.
 
