@@ -1,4 +1,4 @@
-package com.example.oskar.drinkerino
+package com.example.oskar.drinkerino.adapters
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -8,6 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import com.example.oskar.drinkerino.enums.LikeState
+import com.example.oskar.drinkerino.interfaces.OnLikeClick
+import com.example.oskar.drinkerino.R
+import com.example.oskar.drinkerino.objects.SimpleDrink
 import kotlinx.android.synthetic.main.item_drink.view.*
 
 

@@ -1,8 +1,11 @@
-package com.example.oskar.drinkerino
+package com.example.oskar.drinkerino.activities
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import com.example.oskar.drinkerino.fragments.LikesFragment
+import com.example.oskar.drinkerino.fragments.MainFragment
+import com.example.oskar.drinkerino.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
