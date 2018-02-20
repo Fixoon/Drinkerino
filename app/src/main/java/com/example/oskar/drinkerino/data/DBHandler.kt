@@ -12,32 +12,42 @@ import java.util.*
 
 class DBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
-    // Create all tables onCreate
     override fun onCreate(db: SQLiteDatabase) {
-        val CREATE_DRINKS_TABLE = "CREATE TABLE Drinks (DrinkID INTEGER PRIMARY KEY, " + "DrinkName TEXT, IsLiked INTEGER, BaseSpirit TEXT, DrinkGlass INTEGER)"
-        val CREATE_INGREDIENTS_TABLE = "CREATE TABLE Ingredients (IngredientID INTEGER PRIMARY KEY, " + "IngredientName TEXT)"
-        val CREATE_PROPERTIES_TABLE = "CREATE TABLE Properties (PropertyID INTEGER PRIMARY KEY, " + "Property TEXT)"
-        val CREATE_INSTRUCTIONS_TABLE = "CREATE TABLE Instructions (InstructionID INTEGER PRIMARY KEY, " +
-                "Instructions TEXT, DrinkID INTEGER, FOREIGN KEY(DrinkID) REFERENCES Drinks(DrinkID))"
-        val CREATE_MEASUREMENTS_TABLE = "CREATE TABLE Measurements (DrinkID INTEGER, IngredientID INTEGER, " +
-                "Measurement TEXT, FOREIGN KEY(DrinkID) REFERENCES Drinks (DrinkID), FOREIGN KEY(IngredientID) " +
-                "REFERENCES Ingredients(IngredientID), PRIMARY KEY(DrinkID, IngredientID))"
-        val CREATE_DRINKPROPS_TABLE = "CREATE TABLE DrinkProps (DrinkID INTEGER, PropertyID INTEGER, " +
-                "FOREIGN KEY(DrinkID) REFERENCES Drinks(DrinkID), FOREIGN KEY(PropertyID) REFERENCES Properties (PropertyID)," +
-                "PRIMARY KEY(DrinkID, PropertyID))"
-        val CREATE_TOOLS_TABLE = "CREATE TABLE Tools (ToolID INTEGER PRIMARY KEY, ToolName TEXT)"
-        val CREATE_DRINKTOOLS_TABLE ="CREATE TABLE DrinkTools (DrinkID INTEGER, ToolID INTEGER, " +
-                "FOREIGN KEY(DrinkID) REFERENCES Drinks(DrinkID), FOREIGN KEY(ToolID) REFERENCES Tools(ToolID)" +
-                "PRIMARY KEY(DrinkID, ToolID))"
 
-        db.execSQL(CREATE_DRINKS_TABLE)
-        db.execSQL(CREATE_INGREDIENTS_TABLE)
-        db.execSQL(CREATE_PROPERTIES_TABLE)
-        db.execSQL(CREATE_INSTRUCTIONS_TABLE)
-        db.execSQL(CREATE_MEASUREMENTS_TABLE)
-        db.execSQL(CREATE_DRINKPROPS_TABLE)
-        db.execSQL(CREATE_TOOLS_TABLE)
-        db.execSQL(CREATE_DRINKTOOLS_TABLE)
+        val drinksTableQuery = "CREATE TABLE Drinks (DrinkID INTEGER PRIMARY KEY, " +
+                "DrinkName TEXT, IsLiked INTEGER, BaseSpirit TEXT, DrinkGlass INTEGER)"
+
+        val ingredientsTableQuery = "CREATE TABLE Ingredients (IngredientID INTEGER PRIMARY KEY, " +
+                "IngredientName TEXT)"
+
+        val propertiesTableQuery = "CREATE TABLE Properties (PropertyID INTEGER PRIMARY KEY, " + "Property TEXT)"
+
+        val instructionsTableQuery = "CREATE TABLE Instructions (InstructionID INTEGER PRIMARY KEY, " +
+                "Instructions TEXT, DrinkID INTEGER, FOREIGN KEY(DrinkID) REFERENCES Drinks(DrinkID))"
+
+        val measurementsTableQuery = "CREATE TABLE Measurements (DrinkID INTEGER, " +
+                "IngredientID INTEGER, Measurement TEXT, FOREIGN KEY(DrinkID) " +
+                "REFERENCES Drinks (DrinkID), FOREIGN KEY(IngredientID) " +
+                "REFERENCES Ingredients(IngredientID), PRIMARY KEY(DrinkID, IngredientID))"
+
+        val drinkPropsTableQuery = "CREATE TABLE DrinkProps (DrinkID INTEGER, PropertyID INTEGER, " +
+                "FOREIGN KEY(DrinkID) REFERENCES Drinks(DrinkID), FOREIGN KEY(PropertyID) " +
+                "REFERENCES Properties (PropertyID), PRIMARY KEY(DrinkID, PropertyID))"
+
+        val toolsTableQuery = "CREATE TABLE Tools (ToolID INTEGER PRIMARY KEY, ToolName TEXT)"
+
+        val drinkToolsTableQuery = "CREATE TABLE DrinkTools (DrinkID INTEGER, ToolID INTEGER, " +
+                "FOREIGN KEY(DrinkID) REFERENCES Drinks(DrinkID), FOREIGN KEY(ToolID) " +
+                "REFERENCES Tools(ToolID) PRIMARY KEY(DrinkID, ToolID))"
+
+        db.execSQL(drinksTableQuery)
+        db.execSQL(ingredientsTableQuery)
+        db.execSQL(propertiesTableQuery)
+        db.execSQL(instructionsTableQuery)
+        db.execSQL(measurementsTableQuery)
+        db.execSQL(drinkPropsTableQuery)
+        db.execSQL(toolsTableQuery)
+        db.execSQL(drinkToolsTableQuery)
 
 
 

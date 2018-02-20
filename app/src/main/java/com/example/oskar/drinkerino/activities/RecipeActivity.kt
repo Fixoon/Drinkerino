@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
 import android.view.Menu
 import android.widget.TextView
-import com.example.oskar.drinkerino.data.DBHandler
+import com.example.oskar.drinkerino.data.DBHelper
 import com.example.oskar.drinkerino.R
 import com.example.oskar.drinkerino.enums.LikeState
 import kotlinx.android.synthetic.main.activity_detailed_drink.*
@@ -35,7 +35,7 @@ class RecipeActivity : AppCompatActivity() {
     }
 
     private fun displayFullRecipe(drinkID: Int) {
-        val db = DBHandler(this)
+        val db = DBHelper(this)
 
         val recipe = db.getFullRecipe(drinkID)
 

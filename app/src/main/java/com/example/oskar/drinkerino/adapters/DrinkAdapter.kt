@@ -23,13 +23,7 @@ class DrinkAdapter constructor(context: Context, val drinks: ArrayList<SimpleDri
 
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
-        val retView: View
-
-        if(convertView == null){
-            retView = layoutInflater.inflate(R.layout.item_drink, parent, false)
-        }else{
-            retView = convertView
-        }
+        val retView: View = convertView ?: layoutInflater.inflate(R.layout.item_drink, parent, false)
 
         val drink = getItem(position)
         val drinkName = retView.drinkName as TextView

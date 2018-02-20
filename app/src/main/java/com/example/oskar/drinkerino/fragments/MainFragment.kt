@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.app.Fragment
 import android.content.Context
 import android.content.Intent
+import android.database.SQLException
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
@@ -13,7 +14,7 @@ import android.widget.LinearLayout
 import com.example.oskar.drinkerino.*
 import com.example.oskar.drinkerino.activities.RecipeActivity
 import com.example.oskar.drinkerino.adapters.DrinkAdapter
-import com.example.oskar.drinkerino.data.DBHandler
+import com.example.oskar.drinkerino.data.DBHelper
 import com.example.oskar.drinkerino.objects.FilterObject
 import com.example.oskar.drinkerino.enums.LikeState
 import com.example.oskar.drinkerino.interfaces.OnLikeClick
@@ -21,6 +22,7 @@ import com.example.oskar.drinkerino.objects.SimpleDrink
 import kotlinx.android.synthetic.main.custom_dialog.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.item_drink.view.*
+import java.io.IOException
 
 
 /**
@@ -56,7 +58,7 @@ class MainFragment : Fragment(), OnLikeClick {
      */
     override fun likeToggle(position:Int, retView:View){
         val drink: SimpleDrink = adapter.getItem(position)
-        val db = DBHandler(activity)
+        val db = DBHelper(activity)
         val likeAnimation = AnimationUtils.loadAnimation(context, R.anim.pulse)
 
         if(drink.likeState == LikeState.NOT_LIKED){
@@ -70,7 +72,7 @@ class MainFragment : Fragment(), OnLikeClick {
     }
 
     private fun getDrinksFromDB(isLiked: LikeState, filter: FilterObject? = null) : ArrayList<SimpleDrink> {
-        val db = DBHandler(activity)
+        val db = DBHelper(activity)
         return db.getDrinksByFilter(isLiked, filter)
     }
 

@@ -13,7 +13,7 @@ import android.widget.ListView
 import com.example.oskar.drinkerino.*
 import com.example.oskar.drinkerino.activities.RecipeActivity
 import com.example.oskar.drinkerino.adapters.DrinkAdapter
-import com.example.oskar.drinkerino.data.DBHandler
+import com.example.oskar.drinkerino.data.DBHelper
 import com.example.oskar.drinkerino.enums.LikeState
 import com.example.oskar.drinkerino.interfaces.OnLikeClick
 import com.example.oskar.drinkerino.objects.SimpleDrink
@@ -45,7 +45,7 @@ class LikesFragment : Fragment(), OnLikeClick {
      */
     override fun likeToggle(position: Int, retView:View){
         val drink: SimpleDrink = adapter.getItem(position)
-        val db = DBHandler(context)
+        val db = DBHelper(context)
 
         db.setLikeState(drink.drinkID, LikeState.NOT_LIKED)
         drink.likeState = LikeState.NOT_LIKED
@@ -73,7 +73,7 @@ class LikesFragment : Fragment(), OnLikeClick {
 
 
     private fun getDrinksFromDB(isLiked: LikeState) : ArrayList<SimpleDrink> {
-        val db = DBHandler(activity)
+        val db = DBHelper(activity)
         return db.getDrinksByFilter(isLiked)
     }
 
