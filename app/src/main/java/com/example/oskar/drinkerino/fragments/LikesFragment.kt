@@ -47,7 +47,7 @@ class LikesFragment : Fragment(), OnLikeClick {
         val drink: SimpleDrink = adapter.getItem(position)
         val db = DBHelper(context)
 
-        db.setLikeState(drink.drinkID, LikeState.NOT_LIKED)
+        db.setLikeState(drink.id, LikeState.NOT_LIKED)
         drink.likeState = LikeState.NOT_LIKED
         adapter.drinks.removeAt(position)
         toggleText()
@@ -56,7 +56,7 @@ class LikesFragment : Fragment(), OnLikeClick {
                 .setAction(R.string.snackbar_drink_undo, { view ->
                     adapter.drinks.add(position, drink)
                     drink.likeState = LikeState.LIKED
-                    db.setLikeState(drink.drinkID, LikeState.LIKED)
+                    db.setLikeState(drink.id, LikeState.LIKED)
                     adapter.notifyDataSetChanged()
                     toggleText()
                 })
@@ -85,7 +85,7 @@ class LikesFragment : Fragment(), OnLikeClick {
 
         listView.adapter = adapter
         listView.setOnItemClickListener { parent, view, position, id ->
-            val drinkID = adapter.getItem(position).drinkID
+            val drinkID = adapter.getItem(position).id
             val intent = newIntent(activity, drinkID)
             startActivity(intent)
         }

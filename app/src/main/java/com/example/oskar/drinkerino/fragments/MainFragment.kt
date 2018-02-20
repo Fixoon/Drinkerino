@@ -5,24 +5,23 @@ import android.app.Dialog
 import android.app.Fragment
 import android.content.Context
 import android.content.Intent
-import android.database.SQLException
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.CheckBox
 import android.widget.LinearLayout
-import com.example.oskar.drinkerino.*
+import com.example.oskar.drinkerino.FilterDialog
+import com.example.oskar.drinkerino.R
 import com.example.oskar.drinkerino.activities.RecipeActivity
 import com.example.oskar.drinkerino.adapters.DrinkAdapter
 import com.example.oskar.drinkerino.data.DBHelper
-import com.example.oskar.drinkerino.objects.FilterObject
 import com.example.oskar.drinkerino.enums.LikeState
 import com.example.oskar.drinkerino.interfaces.OnLikeClick
+import com.example.oskar.drinkerino.objects.FilterObject
 import com.example.oskar.drinkerino.objects.SimpleDrink
 import kotlinx.android.synthetic.main.custom_dialog.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.item_drink.view.*
-import java.io.IOException
 
 
 /**
@@ -62,11 +61,11 @@ class MainFragment : Fragment(), OnLikeClick {
         val likeAnimation = AnimationUtils.loadAnimation(context, R.anim.pulse)
 
         if(drink.likeState == LikeState.NOT_LIKED){
-            db.setLikeState(drink.drinkID, LikeState.LIKED)
+            db.setLikeState(drink.id, LikeState.LIKED)
             drink.likeState = LikeState.LIKED
             retView.likePicture.startAnimation(likeAnimation)
         }else{
-            db.setLikeState(drink.drinkID, LikeState.NOT_LIKED)
+            db.setLikeState(drink.id, LikeState.NOT_LIKED)
             drink.likeState = LikeState.NOT_LIKED
         }
     }
@@ -82,7 +81,7 @@ class MainFragment : Fragment(), OnLikeClick {
 
         mainDrinkList.adapter = adapter
         mainDrinkList.setOnItemClickListener { parent, view, position, id ->
-            val drinkID = adapter.getItem(position).drinkID
+            val drinkID = adapter.getItem(position).id
             val intent = newIntent(activity, drinkID)
             startActivity(intent)
         }
