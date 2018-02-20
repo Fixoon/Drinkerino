@@ -21,7 +21,7 @@ import java.util.*
  * https://blog.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
  * Modified by me
  */
-class DBHelper(private var context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 1) {
+class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 1) {
 
 
     @Throws(IOException::class)
@@ -34,6 +34,8 @@ class DBHelper(private var context: Context) : SQLiteOpenHelper(context, DB_NAME
         } catch (e: IOException) {
             throw Error("Error copying database")
         }
+
+        this.close()
     }
 
     fun checkDataBase(): Boolean {
@@ -55,13 +57,12 @@ class DBHelper(private var context: Context) : SQLiteOpenHelper(context, DB_NAME
     @Throws(IOException::class)
     private fun copyDataBase() {
 
-        val assetFile = context.assets.open("Drinks")
+        val assetFile = context.assets.open(DB_NAME)
 
-        val outputFileName = DB_PATH + DB_NAME
-
-        val outputFile = FileOutputStream(outputFileName)
+        val outputFile = FileOutputStream(DB_PATH + DB_NAME)
 
         val buffer = ByteArray(1024)
+
         var length = assetFile.read(buffer)
         while (length > 0) {
             outputFile.write(buffer, 0, length)
@@ -119,11 +120,10 @@ class DBHelper(private var context: Context) : SQLiteOpenHelper(context, DB_NAME
         cursor.close()
         db.close()
 
-        return Drink(drinkName, baseSpirit, ingredients, measurements, property, tools, instructions, drinkGlass, likeState)
+        return Drink(drinkName, id, baseSpirit, ingredients, measurements, property, tools, instructions, drinkGlass, likeState)
     }
 
-    fun getDrinksByFilter(isLiked: LikeState, filter: FilterObject? = null): ArrayList<SimpleDrink>
-    {
+    fun getDrinksByFilter(isLiked: LikeState, filter: FilterObject? = null): ArrayList<SimpleDrink> {
         val db = this.readableDatabase
         val drinkList = ArrayList<SimpleDrink>()
 
@@ -135,7 +135,9 @@ class DBHelper(private var context: Context) : SQLiteOpenHelper(context, DB_NAME
 
         if(filter != null){
             if(!filter.properties.isEmpty()){
-                searchProps = "AND Properties.Property IN ('" + filter.properties.joinToString("','") + "')"
+                searchProps = "AND DrinkProps.DrinkID IN (SELECT DrinkProps.DrinkID FROM DrinkProps " +
+                        "INNER JOIN Properties ON DrinkProps.PropertyID=Properties.PropertyID " +
+                        "WHERE Properties.Property IN ('" + filter.properties.joinToString("','") + "'))"
             }
             if(filter.drinkBaseOther){
                 other = "OR Drinks.BaseSpirit NOT IN ('Rom', 'Vodka', 'Tequila', 'Gin', 'Whiskey'))"
@@ -150,10 +152,11 @@ class DBHelper(private var context: Context) : SQLiteOpenHelper(context, DB_NAME
 
 
         val query = "SELECT Drinks.DrinkID, Drinks.DrinkName, Drinks.IsLiked, Drinks.DrinkGlass, " +
-                "GROUP_CONCAT(DISTINCT Properties.Property) " +
+                "GROUP_CONCAT(Properties.Property) " +
                 "FROM Drinks INNER JOIN DrinkProps ON Drinks.DrinkID=DrinkProps.DrinkID " +
                 "INNER JOIN Properties ON DrinkProps.PropertyID=Properties.PropertyID " +
                 "WHERE 1=1 " + searchProps + searchIngredients + searchLikes + " GROUP BY Drinks.DrinkID"
+
         val cursor = db.rawQuery(query, null)
 
         if (cursor.moveToFirst()) {
