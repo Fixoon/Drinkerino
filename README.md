@@ -6,7 +6,7 @@ Drinkerino is about drink recipes. The app has few features. It's very basic.
 
 The name "Drinkerino" is nothing serious.
 
-The app is not perfect, some things could be done better. I'll update the app sometimes when I feel like it
+The app is not perfect, many things could probably be done better. I'll update the app sometimes when I feel like it
 
 Don't take the recipes seriously. I haven't tested any of them.
 
