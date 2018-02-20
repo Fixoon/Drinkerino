@@ -4,10 +4,11 @@ import com.example.oskar.drinkerino.enums.DrinkGlass
 import com.example.oskar.drinkerino.enums.LikeState
 import java.util.*
 
-data class Drink(var name: String, var baseSpirit: String, var ingredients: Array<String>,
-                 var measurements: Array<String>, var properties: Array<String>,
-                 var tools: Array<String>, var instructions: String, var drinkGlass: DrinkGlass,
-                 var likeState: LikeState = LikeState.NOT_LIKED) {
+data class Drink(var name: String, var id: Int, var baseSpirit: String,
+                 var ingredients: Array<String>, var measurements: Array<String>,
+                 var properties: Array<String>, var tools: Array<String>, var instructions: String,
+                 var drinkGlass: DrinkGlass, var likeState: LikeState) {
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
