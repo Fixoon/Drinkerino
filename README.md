@@ -8,8 +8,6 @@ The name "Drinkerino" is nothing serious.
 
 There is a lot that could be done better and I might update the app if I feel like it. 
 
-I'm not too happy about the database solution. It's the first time using SQLite and I'd rather have the database on file than creating it in the app on first run.
-
 Don't take the recipes seriously. I haven't tested any of them.
 
 Feel free to come with suggestions.
