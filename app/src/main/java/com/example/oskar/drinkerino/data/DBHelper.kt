@@ -23,22 +23,7 @@ import java.util.*
  */
 class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 1) {
 
-
-    @Throws(IOException::class)
-    fun createDataBase() {
-        this.readableDatabase
-
-        try {
-            copyDataBase()
-
-        } catch (e: IOException) {
-            throw Error("Error copying database")
-        }
-
-        this.close()
-    }
-
-    fun checkDataBase(): Boolean {
+    fun checkDBExist(): Boolean {
 
         var checkDB: SQLiteDatabase? = null
 
@@ -48,6 +33,7 @@ class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAM
             checkDB.close()
 
         } catch (e: SQLiteException) {
+            this.readableDatabase
             //Database doesn't exist
         }
 
@@ -55,23 +41,26 @@ class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAM
     }
 
     @Throws(IOException::class)
-    private fun copyDataBase() {
+    fun copyDataBase() {
 
-        val assetFile = context.assets.open(DB_NAME)
+        try {
+            val assetFile = context.assets.open(DB_NAME)
+            val outputFile = FileOutputStream(DB_PATH + DB_NAME)
+            val buffer = ByteArray(1024)
 
-        val outputFile = FileOutputStream(DB_PATH + DB_NAME)
+            var length = assetFile.read(buffer)
+            while (length > 0) {
+                outputFile.write(buffer, 0, length)
+                length = assetFile.read(buffer)
+            }
 
-        val buffer = ByteArray(1024)
+            outputFile.flush()
+            outputFile.close()
+            assetFile.close()
 
-        var length = assetFile.read(buffer)
-        while (length > 0) {
-            outputFile.write(buffer, 0, length)
-            length = assetFile.read(buffer)
+        } catch (e: IOException) {
+            throw Error("Error copying database")
         }
-
-        outputFile.flush()
-        outputFile.close()
-        assetFile.close()
     }
 
     fun getFullRecipe(id: Int): Drink {
@@ -143,7 +132,8 @@ class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAM
                 other = "OR Drinks.BaseSpirit NOT IN ('Rom', 'Vodka', 'Tequila', 'Gin', 'Whiskey'))"
             }
             if(!filter.drinkBase.isEmpty()){
-                searchIngredients = "AND (Drinks.BaseSpirit IN ('" + filter.drinkBase.joinToString("','") + "')" + other
+                searchIngredients = "AND (Drinks.BaseSpirit IN " +
+                        "('" + filter.drinkBase.joinToString("','") + "')" + other
             }
         }
         if(isLiked != LikeState.IGNORE){

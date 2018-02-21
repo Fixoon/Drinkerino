@@ -38,9 +38,9 @@ class MainActivity : AppCompatActivity() {
 
         var db = DBHelper(this)
 
-        if(!db.checkDataBase()){
+        if(!db.checkDBExist()){
             try {
-                db.createDataBase()
+                db.copyDataBase()
 
             } catch (ioe: IOException) {
 
