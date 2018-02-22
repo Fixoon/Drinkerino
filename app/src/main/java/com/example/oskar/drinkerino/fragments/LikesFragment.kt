@@ -1,11 +1,11 @@
 package com.example.oskar.drinkerino.fragments
 
 
-import android.app.Fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +52,7 @@ class LikesFragment : Fragment(), OnLikeClick {
         adapter.drinks.removeAt(position)
         toggleText()
 
-        val undoSnackbar = Snackbar.make(view, drink.name + " " + getString(R.string.snackbar_drink_removed), Snackbar.LENGTH_LONG)
+        val undoSnackbar = Snackbar.make(view!!, drink.name + " " + getString(R.string.snackbar_drink_removed), Snackbar.LENGTH_LONG)
                 .setAction(R.string.snackbar_drink_undo, { view ->
                     adapter.drinks.add(position, drink)
                     drink.likeState = LikeState.LIKED

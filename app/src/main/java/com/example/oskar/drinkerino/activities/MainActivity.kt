@@ -18,11 +18,11 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                fragmentManager.beginTransaction().replace(R.id.frameLayout, mainFragment).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.frameLayout, mainFragment).commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_liked -> {
-                fragmentManager.beginTransaction().replace(R.id.frameLayout, likesFragment).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.frameLayout, likesFragment).commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_settings -> {
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        fragmentManager.beginTransaction().replace(R.id.frameLayout, mainFragment).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.frameLayout, mainFragment).commit()
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
