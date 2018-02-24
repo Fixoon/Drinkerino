@@ -1,11 +1,13 @@
 package com.example.oskar.drinkerino.fragments
 
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +25,7 @@ import java.util.*
 
 class LikesFragment : Fragment(), OnLikeClick {
     private lateinit var adapter: DrinkAdapter
+    private var activeDrinkPos = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -85,9 +88,22 @@ class LikesFragment : Fragment(), OnLikeClick {
 
         listView.adapter = adapter
         listView.setOnItemClickListener { parent, view, position, id ->
+            activeDrinkPos = position
             val drinkID = adapter.getItem(position).id
             val intent = newIntent(activity, drinkID)
-            startActivity(intent)
+            startActivityForResult(intent, 1)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                val result:LikeState = data!!.getSerializableExtra("LikeState") as LikeState
+                if(result == LikeState.NOT_LIKED){
+                    adapter.drinks.removeAt(activeDrinkPos)
+                    adapter.notifyDataSetChanged()
+                }
+            }
         }
     }
 

@@ -33,8 +33,8 @@ class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAM
             checkDB.close()
 
         } catch (e: SQLiteException) {
+            //Database doesn't exist. Call "this.readableDatabase" to create Database
             this.readableDatabase
-            //Database doesn't exist
         }
 
         return checkDB != null

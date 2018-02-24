@@ -22,6 +22,11 @@ import com.example.oskar.drinkerino.objects.SimpleDrink
 import kotlinx.android.synthetic.main.custom_dialog.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.item_drink.view.*
+import android.app.Activity
+import android.util.Log
+import android.R.attr.data
+
+
 
 
 /**
@@ -32,6 +37,7 @@ class MainFragment : Fragment(), OnLikeClick {
     private lateinit var filterDialog: Dialog
     private val propertiesList = arrayOf("Söt", "Sur", "Besk", "Syrlig", "Salt")
     private val ingredientsList = arrayOf("Rom", "Vodka", "Tequila", "Gin", "Whiskey", "Övriga")
+    private var activeDrinkPos = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -81,9 +87,10 @@ class MainFragment : Fragment(), OnLikeClick {
 
         mainDrinkList.adapter = adapter
         mainDrinkList.setOnItemClickListener { parent, view, position, id ->
+            activeDrinkPos = position
             val drinkID = adapter.getItem(position).id
             val intent = newIntent(activity, drinkID)
-            startActivity(intent)
+            startActivityForResult(intent, 1)
         }
     }
 
@@ -151,6 +158,18 @@ class MainFragment : Fragment(), OnLikeClick {
         }
 
         return checkedBoxes
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                val result:LikeState = data!!.getSerializableExtra("LikeState") as LikeState
+                val drink: SimpleDrink = adapter.getItem(activeDrinkPos)
+                drink.likeState = result
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 
     companion object {
