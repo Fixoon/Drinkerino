@@ -28,6 +28,7 @@ import com.example.oskar.drinkerino.objects.FilterDialogCheckboxes
 class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
     private lateinit var adapter: DrinkAdapter
     private lateinit var filterDialogFrag: FilterDialogFragment
+    private var currentDrinkList: ArrayList<SimpleDrink> = arrayListOf()
     private val propertiesList = arrayOf("Söt", "Sur", "Besk", "Syrlig", "Salt")
     private val ingredientsList = arrayOf("Rom", "Vodka", "Tequila", "Gin", "Whiskey", "Övriga")
     private var checkedProperties = arrayListOf(false, false, false, false, false)
@@ -41,13 +42,15 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initializeListView(getDrinksFromDB(LikeState.IGNORE))
+        if(currentDrinkList.isEmpty()){
+            currentDrinkList = getDrinksFromDB(LikeState.IGNORE)
+        }
+        initializeListView(currentDrinkList)
 
         filterDialogFrag = FilterDialogFragment()
         filterDialogFrag.newInstance(propertiesList, ingredientsList, checkedProperties, checkedDrinkBases)
         filterDialogFrag.setTargetFragment(this, 0)
 
-        Log.d("this is", "a test")
         this.setHasOptionsMenu(true)
     }
 
@@ -114,7 +117,9 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
 
         filterDialogFrag.newInstance(propertiesList, ingredientsList, checkedProperties, checkedDrinkBases)
 
-        updateListView(getDrinksFromDB(LikeState.IGNORE, filter))
+        currentDrinkList = getDrinksFromDB(LikeState.IGNORE, filter)
+
+        updateListView(currentDrinkList)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
