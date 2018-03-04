@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,19 +16,18 @@ import com.example.oskar.drinkerino.activities.RecipeActivity
 import com.example.oskar.drinkerino.adapters.DrinkAdapter
 import com.example.oskar.drinkerino.data.DBHelper
 import com.example.oskar.drinkerino.enums.LikeState
-import com.example.oskar.drinkerino.interfaces.OnLikeClick
+import com.example.oskar.drinkerino.interfaces.DrinkAdapterLikeAction
 import com.example.oskar.drinkerino.objects.SimpleDrink
 import kotlinx.android.synthetic.main.fragment_likes.*
 import java.util.*
 
 
-class LikesFragment : Fragment(), OnLikeClick {
+class LikesFragment : Fragment(), DrinkAdapterLikeAction {
     private lateinit var adapter: DrinkAdapter
     private var activeDrinkPos = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_likes, container, false)
     }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -40,12 +38,6 @@ class LikesFragment : Fragment(), OnLikeClick {
         toggleText()
     }
 
-    /**
-     * Toggle drinks like state
-     *
-     * @param position Position of drink in current list in adapter
-     * @param retView Drinks main View
-     */
     override fun likeToggle(position: Int, retView:View){
         val drink: SimpleDrink = adapter.getItem(position)
         val db = DBHelper(context)
