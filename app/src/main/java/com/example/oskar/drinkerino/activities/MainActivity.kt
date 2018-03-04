@@ -36,16 +36,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var db = DBHelper(this)
+        val db = DBHelper(this)
 
         if(!db.checkDBExist()){
             try {
                 db.copyDataBase()
-
             } catch (ioe: IOException) {
-
                 throw Error("Unable to create database")
-
             }
         }
 

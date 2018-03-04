@@ -1,24 +1,19 @@
 package com.example.oskar.drinkerino.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
-import android.view.animation.AnimationUtils
 import android.widget.TextView
-import com.example.oskar.drinkerino.data.DBHelper
 import com.example.oskar.drinkerino.R
+import com.example.oskar.drinkerino.data.DBHelper
 import com.example.oskar.drinkerino.enums.LikeState
-import com.example.oskar.drinkerino.fragments.MainFragment
-import com.example.oskar.drinkerino.activities.MainActivity
 import com.example.oskar.drinkerino.objects.Drink
 import kotlinx.android.synthetic.main.activity_detailed_drink.*
-import android.app.Activity
-import android.content.Intent
-
-
 
 
 class RecipeActivity : AppCompatActivity() {
