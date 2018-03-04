@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.example.oskar.drinkerino.enums.DrinkGlass
 import com.example.oskar.drinkerino.enums.LikeState
 import com.example.oskar.drinkerino.objects.Drink
-import com.example.oskar.drinkerino.objects.FilterObject
+import com.example.oskar.drinkerino.objects.Filter
 import com.example.oskar.drinkerino.objects.SimpleDrink
 import java.io.FileOutputStream
 import java.io.IOException
@@ -112,7 +112,7 @@ class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAM
         return Drink(drinkName, id, baseSpirit, ingredients, measurements, property, tools, instructions, drinkGlass, likeState)
     }
 
-    fun getDrinksByFilter(isLiked: LikeState, filter: FilterObject? = null): ArrayList<SimpleDrink> {
+    fun getDrinksByFilter(isLiked: LikeState, filter: Filter? = null): ArrayList<SimpleDrink> {
         val db = this.readableDatabase
         val drinkList = ArrayList<SimpleDrink>()
 
