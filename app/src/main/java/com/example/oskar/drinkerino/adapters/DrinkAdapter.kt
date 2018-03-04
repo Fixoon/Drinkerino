@@ -9,13 +9,13 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.oskar.drinkerino.enums.LikeState
-import com.example.oskar.drinkerino.interfaces.OnLikeClick
+import com.example.oskar.drinkerino.interfaces.DrinkAdapterLikeAction
 import com.example.oskar.drinkerino.R
 import com.example.oskar.drinkerino.objects.SimpleDrink
 import kotlinx.android.synthetic.main.item_drink.view.*
 
 
-class DrinkAdapter constructor(context: Context, val drinks: ArrayList<SimpleDrink>, private val callback: OnLikeClick) : ArrayAdapter<SimpleDrink>(context, 0, drinks) {
+class DrinkAdapter constructor(context: Context, val drinks: ArrayList<SimpleDrink>, private val callback: DrinkAdapterLikeAction) : ArrayAdapter<SimpleDrink>(context, 0, drinks) {
     private val layoutInflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private val heartImageArray:ArrayList<Drawable> = arrayListOf(context.getDrawable(R.drawable.ic_heart_outline), context.getDrawable(R.drawable.ic_heart))
     private val glassImageArray:ArrayList<Drawable> = arrayListOf(context.getDrawable(R.drawable.ic_glass_lowball), context.getDrawable(R.drawable.ic_glass_highball),
