@@ -1,34 +1,32 @@
 package com.example.oskar.drinkerino.fragments
 
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.*
 import android.view.animation.AnimationUtils
+import com.example.oskar.drinkerino.FilterDialogFragment
 import com.example.oskar.drinkerino.R
 import com.example.oskar.drinkerino.activities.RecipeActivity
 import com.example.oskar.drinkerino.adapters.DrinkAdapter
 import com.example.oskar.drinkerino.data.DBHelper
 import com.example.oskar.drinkerino.enums.LikeState
 import com.example.oskar.drinkerino.interfaces.DrinkAdapterLikeAction
+import com.example.oskar.drinkerino.interfaces.FilterDialogAction
 import com.example.oskar.drinkerino.objects.Filter
+import com.example.oskar.drinkerino.objects.FilterDialogCheckboxes
 import com.example.oskar.drinkerino.objects.SimpleDrink
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.item_drink.view.*
-import android.app.Activity
-import android.util.Log
-import com.example.oskar.drinkerino.FilterDialogFragment
-import com.example.oskar.drinkerino.interfaces.FilterDialogAction
-import com.example.oskar.drinkerino.objects.FilterDialogCheckboxes
-
 
 
 class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
     private lateinit var adapter: DrinkAdapter
     private lateinit var filterDialogFrag: FilterDialogFragment
-    private var currentDrinkList: ArrayList<SimpleDrink> = arrayListOf()
+    private var currentFilter:Filter? = null
     private val propertiesList = arrayOf("Söt", "Sur", "Besk", "Syrlig", "Salt")
     private val ingredientsList = arrayOf("Rom", "Vodka", "Tequila", "Gin", "Whiskey", "Övriga")
     private var checkedProperties = arrayListOf(false, false, false, false, false)
@@ -42,16 +40,20 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(currentDrinkList.isEmpty()){
-            currentDrinkList = getDrinksFromDB(LikeState.IGNORE)
-        }
-        initializeListView(currentDrinkList)
+        initializeListView(getDrinksFromDB(LikeState.IGNORE, currentFilter))
 
         filterDialogFrag = FilterDialogFragment()
         filterDialogFrag.newInstance(propertiesList, ingredientsList, checkedProperties, checkedDrinkBases)
         filterDialogFrag.setTargetFragment(this, 0)
 
         this.setHasOptionsMenu(true)
+    }
+
+    fun resetFragment(){
+        checkedProperties = arrayListOf(false, false, false, false, false)
+        checkedDrinkBases = arrayListOf(false, false, false, false, false, false)
+        updateListView(getDrinksFromDB(LikeState.IGNORE))
+        mainDrinkList.setSelectionAfterHeaderView()
     }
 
     override fun likeToggle(position:Int, retView:View){
@@ -106,20 +108,17 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_filter) {
             filterDialogFrag.show(fragmentManager, "Test")
+            filterDialogFrag.newInstance(propertiesList, ingredientsList, checkedProperties, checkedDrinkBases)
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun filterClick(propertiesDialogCheckboxes: FilterDialogCheckboxes, drinkBaseDialogCheckboxes: FilterDialogCheckboxes, checkOther:Boolean){
-        val filter = Filter(propertiesDialogCheckboxes.checkedBoxesNames, drinkBaseDialogCheckboxes.checkedBoxesNames, checkOther)
+        currentFilter = Filter(propertiesDialogCheckboxes.checkedBoxesNames, drinkBaseDialogCheckboxes.checkedBoxesNames, checkOther)
         checkedProperties = propertiesDialogCheckboxes.checkedBoxes
         checkedDrinkBases = drinkBaseDialogCheckboxes.checkedBoxes
 
-        filterDialogFrag.newInstance(propertiesList, ingredientsList, checkedProperties, checkedDrinkBases)
-
-        currentDrinkList = getDrinksFromDB(LikeState.IGNORE, filter)
-
-        updateListView(currentDrinkList)
+        updateListView(getDrinksFromDB(LikeState.IGNORE, currentFilter))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

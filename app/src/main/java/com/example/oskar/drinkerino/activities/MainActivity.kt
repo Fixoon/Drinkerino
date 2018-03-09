@@ -3,10 +3,10 @@ package com.example.oskar.drinkerino.activities
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import com.example.oskar.drinkerino.fragments.LikesFragment
-import com.example.oskar.drinkerino.fragments.MainFragment
 import com.example.oskar.drinkerino.R
 import com.example.oskar.drinkerino.data.DBHelper
+import com.example.oskar.drinkerino.fragments.LikesFragment
+import com.example.oskar.drinkerino.fragments.MainFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.IOException
 
@@ -18,11 +18,19 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                supportFragmentManager.beginTransaction().replace(R.id.frameLayout, mainFragment).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.frameLayout, mainFragment, "mainFragment").commit()
+                val mainFragmentByTag = mainFragment.fragmentManager.findFragmentByTag("mainFragment")
+                if(mainFragmentByTag != null && mainFragmentByTag.isVisible){
+                    mainFragment.resetFragment()
+                }
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_liked -> {
-                supportFragmentManager.beginTransaction().replace(R.id.frameLayout, likesFragment).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.frameLayout, likesFragment, "likesFragment").commit()
+                val likesFragmentByTag = likesFragment.fragmentManager.findFragmentByTag("likesFragment")
+                if(likesFragmentByTag != null && likesFragmentByTag.isVisible){
+                    likesFragment.resetFragment()
+                }
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_settings -> {

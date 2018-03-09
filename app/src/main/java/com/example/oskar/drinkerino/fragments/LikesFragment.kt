@@ -11,7 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import com.example.oskar.drinkerino.*
+import com.example.oskar.drinkerino.R
 import com.example.oskar.drinkerino.activities.RecipeActivity
 import com.example.oskar.drinkerino.adapters.DrinkAdapter
 import com.example.oskar.drinkerino.data.DBHelper
@@ -36,6 +36,10 @@ class LikesFragment : Fragment(), DrinkAdapterLikeAction {
         val drinkList = getDrinksFromDB(LikeState.LIKED)
         initializeListView(drinkList)
         toggleText()
+    }
+
+    fun resetFragment(){
+        likeDrinkList.setSelectionAfterHeaderView()
     }
 
     override fun likeToggle(position: Int, retView:View){
