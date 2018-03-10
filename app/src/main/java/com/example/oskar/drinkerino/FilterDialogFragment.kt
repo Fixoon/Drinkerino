@@ -14,7 +14,11 @@ import kotlinx.android.synthetic.main.custom_dialog.view.*
 
 
 class FilterDialogFragment : DialogFragment(), FilterDialogAction {
-    fun newInstance(propertiesList:Array<String>, ingredientsList:Array<String>, checkedProperties:ArrayList<Boolean>, checkedIngredients:ArrayList<Boolean>): FilterDialogFragment {
+    fun newInstance(propertiesList:Array<String>,
+                    ingredientsList:Array<String>,
+                    checkedProperties:ArrayList<Boolean>,
+                    checkedIngredients:ArrayList<Boolean>): FilterDialogFragment {
+
         mPropertiesList = propertiesList
         mCheckedProperties = checkedProperties
         mIngredientsList = ingredientsList
@@ -31,7 +35,9 @@ class FilterDialogFragment : DialogFragment(), FilterDialogAction {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater?,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.custom_dialog, container)
 
         addCheckboxes(mPropertiesList, mIngredientsList, view)

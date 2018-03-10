@@ -15,10 +15,14 @@ class MainActivity : AppCompatActivity() {
     private val mainFragment = MainFragment()
     private val likesFragment = LikesFragment()
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+    private val mOnNavigationItemSelectedListener =
+            BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                supportFragmentManager.beginTransaction().replace(R.id.frameLayout, mainFragment, "mainFragment").commit()
+                supportFragmentManager.beginTransaction().replace(
+                        R.id.frameLayout,
+                        mainFragment,
+                        "mainFragment").commit()
                 val mainFragmentByTag = mainFragment.fragmentManager.findFragmentByTag("mainFragment")
                 if(mainFragmentByTag != null && mainFragmentByTag.isVisible){
                     mainFragment.resetFragment()
@@ -26,7 +30,9 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_liked -> {
-                supportFragmentManager.beginTransaction().replace(R.id.frameLayout, likesFragment, "likesFragment").commit()
+                supportFragmentManager.beginTransaction().replace(R.id.frameLayout,
+                                                                likesFragment,
+                                                                "likesFragment").commit()
                 val likesFragmentByTag = likesFragment.fragmentManager.findFragmentByTag("likesFragment")
                 if(likesFragmentByTag != null && likesFragmentByTag.isVisible){
                     likesFragment.resetFragment()

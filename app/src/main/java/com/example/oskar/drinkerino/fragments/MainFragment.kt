@@ -31,9 +31,11 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
     private val ingredientsList = arrayOf("Rom", "Vodka", "Tequila", "Gin", "Whiskey", "Övriga")
     private var checkedProperties = arrayListOf(false, false, false, false, false)
     private var checkedDrinkBases = arrayListOf(false, false, false, false, false, false)
-    private var activeDrinkPos = 0
+    private var activeDrinkPosition = 0
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
@@ -43,7 +45,10 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
         initializeListView(getDrinksFromDB(LikeState.IGNORE, currentFilter))
 
         filterDialogFrag = FilterDialogFragment()
-        filterDialogFrag.newInstance(propertiesList, ingredientsList, checkedProperties, checkedDrinkBases)
+        filterDialogFrag.newInstance(propertiesList,
+                                    ingredientsList,
+                                    checkedProperties,
+                                    checkedDrinkBases)
         filterDialogFrag.setTargetFragment(this, 0)
 
         this.setHasOptionsMenu(true)
@@ -82,7 +87,7 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
 
         mainDrinkList.adapter = adapter
         mainDrinkList.setOnItemClickListener { parent, view, position, id ->
-            activeDrinkPos = position
+            activeDrinkPosition = position
             val drinkID = adapter.getItem(position).id
             val intent = newIntent(activity, drinkID)
             startActivityForResult(intent, 1)
@@ -91,9 +96,9 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
 
     private fun updateListView(drinkList: ArrayList<SimpleDrink>){
         adapter.clear()
-        adapter.addAll(drinkList)
 
-        if(!adapter.isEmpty){
+        if(drinkList.isNotEmpty()){
+            adapter.addAll(drinkList)
             noMatchText.visibility = View.INVISIBLE
         }else{
             noMatchText.visibility = View.VISIBLE
@@ -108,13 +113,20 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_filter) {
             filterDialogFrag.show(fragmentManager, "Test")
-            filterDialogFrag.newInstance(propertiesList, ingredientsList, checkedProperties, checkedDrinkBases)
+            filterDialogFrag.newInstance(propertiesList,
+                                        ingredientsList,
+                                        checkedProperties,
+                                        checkedDrinkBases)
         }
         return super.onOptionsItemSelected(item)
     }
 
-    override fun filterClick(propertiesDialogCheckboxes: FilterDialogCheckboxes, drinkBaseDialogCheckboxes: FilterDialogCheckboxes, checkOther:Boolean){
-        currentFilter = Filter(propertiesDialogCheckboxes.checkedBoxesNames, drinkBaseDialogCheckboxes.checkedBoxesNames, checkOther)
+    override fun filterClick(propertiesDialogCheckboxes: FilterDialogCheckboxes,
+                             drinkBaseDialogCheckboxes: FilterDialogCheckboxes,
+                             checkOther:Boolean){
+        currentFilter = Filter(propertiesDialogCheckboxes.checkedBoxesNames,
+                                drinkBaseDialogCheckboxes.checkedBoxesNames,
+                                checkOther)
         checkedProperties = propertiesDialogCheckboxes.checkedBoxes
         checkedDrinkBases = drinkBaseDialogCheckboxes.checkedBoxes
 
@@ -122,20 +134,16 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
-        if (requestCode == 1) {
-            if (resultCode == Activity.RESULT_OK) {
-                val result:LikeState = data!!.getSerializableExtra("LikeState") as LikeState
-                val drink: SimpleDrink = adapter.getItem(activeDrinkPos)
-                drink.likeState = result
-                adapter.notifyDataSetChanged()
-            }
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            val result:LikeState = data!!.getSerializableExtra("LikeState") as LikeState
+            val drink: SimpleDrink = adapter.getItem(activeDrinkPosition)
+            drink.likeState = result
+            adapter.notifyDataSetChanged()
         }
     }
 
     companion object {
         fun newIntent(context: Context, drinkID: Int): Intent {
-
             val intent = Intent(context, RecipeActivity::class.java)
             intent.putExtra("drink_id" , drinkID)
             return intent

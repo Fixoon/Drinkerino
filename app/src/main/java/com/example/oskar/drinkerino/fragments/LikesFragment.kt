@@ -24,17 +24,17 @@ import java.util.*
 
 class LikesFragment : Fragment(), DrinkAdapterLikeAction {
     private lateinit var adapter: DrinkAdapter
-    private var activeDrinkPos = 0
+    private var activeDrinkPosition = 0
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_likes, container, false)
     }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val drinkList = getDrinksFromDB(LikeState.LIKED)
-        initializeListView(drinkList)
+        initializeListView(getDrinksFromDB(LikeState.LIKED))
         toggleText()
     }
 
@@ -51,7 +51,9 @@ class LikesFragment : Fragment(), DrinkAdapterLikeAction {
         adapter.drinks.removeAt(position)
         toggleText()
 
-        val undoSnackbar = Snackbar.make(view!!, drink.name + " " + getString(R.string.snackbar_drink_removed), Snackbar.LENGTH_LONG)
+        val undoSnackbar = Snackbar.make(view!!, drink.name + " " +
+                getString(R.string.snackbar_drink_removed), Snackbar.LENGTH_LONG)
+
                 .setAction(R.string.snackbar_drink_undo, { view ->
                     adapter.drinks.add(position, drink)
                     drink.likeState = LikeState.LIKED
@@ -70,21 +72,19 @@ class LikesFragment : Fragment(), DrinkAdapterLikeAction {
         }
     }
 
-
     private fun getDrinksFromDB(isLiked: LikeState) : ArrayList<SimpleDrink> {
         val db = DBHelper(activity)
         return db.getDrinksByFilter(isLiked)
     }
 
     private fun initializeListView(drinkList: ArrayList<SimpleDrink>){
-
         adapter = DrinkAdapter(activity, drinkList, this)
 
         val listView = likeDrinkList as ListView
 
         listView.adapter = adapter
         listView.setOnItemClickListener { parent, view, position, id ->
-            activeDrinkPos = position
+            activeDrinkPosition = position
             val drinkID = adapter.getItem(position).id
             val intent = newIntent(activity, drinkID)
             startActivityForResult(intent, 1)
@@ -92,13 +92,12 @@ class LikesFragment : Fragment(), DrinkAdapterLikeAction {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == 1) {
-            if (resultCode == Activity.RESULT_OK) {
-                val result:LikeState = data!!.getSerializableExtra("LikeState") as LikeState
-                if(result == LikeState.NOT_LIKED){
-                    adapter.drinks.removeAt(activeDrinkPos)
-                    adapter.notifyDataSetChanged()
-                }
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            val result:LikeState = data!!.getSerializableExtra("LikeState") as LikeState
+            if(result == LikeState.NOT_LIKED){
+                adapter.drinks.removeAt(activeDrinkPosition)
+                toggleText()
+                adapter.notifyDataSetChanged()
             }
         }
     }

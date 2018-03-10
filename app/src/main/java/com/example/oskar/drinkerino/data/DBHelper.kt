@@ -16,15 +16,9 @@ import java.io.IOException
 import java.util.*
 
 
-/**
- * Original code by Juan-Manuel Fluxà
- * https://blog.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
- * Modified by me
- */
 class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 1) {
 
     fun checkDBExist(): Boolean {
-
         var checkDB: SQLiteDatabase? = null
 
         try {
@@ -151,7 +145,11 @@ class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAM
 
         if (cursor.moveToFirst()) {
             do {
-                drinkList.add(SimpleDrink(cursor.getString(1), cursor.getString(4), cursor.getInt(0), LikeState.fromInt(cursor.getInt(2))!!, DrinkGlass.fromInt(cursor.getInt(3))!!))
+                drinkList.add(SimpleDrink(cursor.getString(1),
+                                            cursor.getString(4),
+                                            cursor.getInt(0),
+                                            LikeState.fromInt(cursor.getInt(2))!!,
+                                            DrinkGlass.fromInt(cursor.getInt(3))!!))
             } while (cursor.moveToNext())
         }
 
@@ -184,6 +182,6 @@ class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAM
     companion object {
         @SuppressLint("SdCardPath")
         private val DB_PATH = "/data/data/com.example.oskar.drinkerino/databases/"
-        private val DB_NAME = "Drinks"
+        private const val DB_NAME = "Drinks"
     }
 }
