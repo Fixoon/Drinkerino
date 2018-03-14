@@ -6,23 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.LinearLayout
 import com.example.oskar.drinkerino.interfaces.FilterDialogAction
-import com.example.oskar.drinkerino.objects.FilterDialogCheckboxes
 import kotlinx.android.synthetic.main.custom_dialog.*
 import kotlinx.android.synthetic.main.custom_dialog.view.*
 
 
 class FilterDialogFragment : DialogFragment(), FilterDialogAction {
     fun newInstance(propertiesList:Array<String>,
-                    ingredientsList:Array<String>,
-                    checkedProperties:ArrayList<Boolean>,
-                    checkedIngredients:ArrayList<Boolean>): FilterDialogFragment {
+                    ingredientsList:Array<String>): FilterDialogFragment {
 
         mPropertiesList = propertiesList
-        mCheckedProperties = checkedProperties
-        mIngredientsList = ingredientsList
-        mCheckedIngredients = checkedIngredients
+        mBaseSpiritsList = ingredientsList
+
+        mCheckedProperties = BooleanArray(propertiesList.size)
+        mCheckedBaseSpirits = BooleanArray(ingredientsList.size)
+
         return FilterDialogFragment()
     }
 
@@ -40,15 +38,15 @@ class FilterDialogFragment : DialogFragment(), FilterDialogAction {
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.custom_dialog, container)
 
-        addCheckboxes(mPropertiesList, mIngredientsList, view)
+        addCheckboxes(mPropertiesList, mBaseSpiritsList, view)
+
 
         view.cancelButton.setOnClickListener{
             dismiss()
         }
         view.actionButton.setOnClickListener{
-            mCallback.filterClick(getCheckedBoxes(arrayOf(propertyLayoutLeft, propertyLayoutRight)),
-                                getCheckedBoxes(arrayOf(drinkBaseLayoutLeft, drinkBaseLayoutRight)),
-                                (drinkBaseLayoutRight.getChildAt(2) as CheckBox).isChecked)
+            val checkBoxes = getCheckedBoxes()
+            mCallback.filterClick(checkBoxes[0], checkBoxes[1], (baseSpiritLayoutRight.getChildAt(2) as CheckBox).isChecked)
             dismiss()
         }
 
@@ -68,45 +66,71 @@ class FilterDialogFragment : DialogFragment(), FilterDialogAction {
         }
         ingredientsList.forEachIndexed{ index, s ->
             val newCheckBox = CheckBox(activity)
-            newCheckBox.isChecked = mCheckedIngredients[index]
+            newCheckBox.isChecked = mCheckedBaseSpirits[index]
             newCheckBox.text = s
             if(index % 2 == 1){
-                view.drinkBaseLayoutRight.addView(newCheckBox)
+                view.baseSpiritLayoutRight.addView(newCheckBox)
             }else{
-                view.drinkBaseLayoutLeft.addView(newCheckBox)
+                view.baseSpiritLayoutLeft.addView(newCheckBox)
             }
         }
     }
 
-    private fun getCheckedBoxes(parentViews:Array<LinearLayout>) : FilterDialogCheckboxes {
-        val checkedBoxesNames:ArrayList<String> = arrayListOf()
-        val checkedBoxes:ArrayList<Boolean> = arrayListOf()
+    private fun getCheckedBoxes() : Array<ArrayList<String>> {
+        val properties:ArrayList<String> = arrayListOf()
+        val baseSpirits:ArrayList<String> = arrayListOf()
 
-        var index = 0
-        for(i in 0 until (parentViews[0].childCount + parentViews[1].childCount)){
+
+        var propertyIndex = 0
+        for(i in 0 until (propertyLayoutLeft.childCount + propertyLayoutRight.childCount)){
             if(i % 2 == 0){
-                checkedBoxes.add((parentViews[0].getChildAt(index) as CheckBox).isChecked)
+                val checkBox = propertyLayoutLeft.getChildAt(propertyIndex) as CheckBox
+                mCheckedProperties[i] = checkBox.isChecked
+                if(checkBox.isChecked){
+                    properties.add(checkBox.text.toString())
+                }
             }else{
-                checkedBoxes.add((parentViews[1].getChildAt(index) as CheckBox).isChecked)
-                index++
+                val checkBox = propertyLayoutRight.getChildAt(propertyIndex) as CheckBox
+                mCheckedProperties[i] = checkBox.isChecked
+                if(checkBox.isChecked){
+                    properties.add(checkBox.text.toString())
+                }
+                propertyIndex++
             }
         }
 
-        parentViews.forEachIndexed{ _, l ->
-            (0 until l.childCount)
-                    .map { l.getChildAt(it) as CheckBox }
-                    .filter { it.isChecked }
-                    .mapTo(checkedBoxesNames) { it.text.toString() }
+        var baseSpiritIndex = 0
+        for(i in 0 until (baseSpiritLayoutLeft.childCount + baseSpiritLayoutRight.childCount)){
+            if(i % 2 == 0){
+                val checkBox = baseSpiritLayoutLeft.getChildAt(baseSpiritIndex) as CheckBox
+                mCheckedBaseSpirits[i] = checkBox.isChecked
+                if(checkBox.isChecked){
+                    baseSpirits.add(checkBox.text.toString())
+                }
+            }else{
+                val checkBox = baseSpiritLayoutRight.getChildAt(baseSpiritIndex) as CheckBox
+                mCheckedBaseSpirits[i] = checkBox.isChecked
+                if(checkBox.isChecked){
+                    baseSpirits.add(checkBox.text.toString())
+                }
+                baseSpiritIndex++
+            }
         }
 
-        return FilterDialogCheckboxes(checkedBoxesNames, checkedBoxes)
+        return arrayOf(properties, baseSpirits)
+    }
+
+    fun resetDialogFragment(){
+        mCheckedProperties = BooleanArray(mPropertiesList.size)
+        mCheckedBaseSpirits = BooleanArray(mBaseSpiritsList.size)
+
     }
 
     companion object {
         private lateinit var mPropertiesList: Array<String>
-        private lateinit var mCheckedProperties: ArrayList<Boolean>
-        private lateinit var mIngredientsList: Array<String>
-        private lateinit var mCheckedIngredients: ArrayList<Boolean>
+        private lateinit var mCheckedProperties: BooleanArray
+        private lateinit var mBaseSpiritsList: Array<String>
+        private lateinit var mCheckedBaseSpirits: BooleanArray
         private lateinit var mCallback: FilterDialogAction
     }
 }

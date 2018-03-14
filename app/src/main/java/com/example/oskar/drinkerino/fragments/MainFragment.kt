@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
 import com.example.oskar.drinkerino.FilterDialogFragment
@@ -17,7 +18,6 @@ import com.example.oskar.drinkerino.enums.LikeState
 import com.example.oskar.drinkerino.interfaces.DrinkAdapterLikeAction
 import com.example.oskar.drinkerino.interfaces.FilterDialogAction
 import com.example.oskar.drinkerino.objects.Filter
-import com.example.oskar.drinkerino.objects.FilterDialogCheckboxes
 import com.example.oskar.drinkerino.objects.SimpleDrink
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.item_drink.view.*
@@ -25,12 +25,11 @@ import kotlinx.android.synthetic.main.item_drink.view.*
 
 class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
     private lateinit var adapter: DrinkAdapter
-    private lateinit var filterDialogFrag: FilterDialogFragment
+    private lateinit var filterDialogFragment: FilterDialogFragment
+    private var isInstantiated = false
     private var currentFilter:Filter? = null
     private val propertiesList = arrayOf("Söt", "Sur", "Besk", "Syrlig", "Salt")
-    private val ingredientsList = arrayOf("Rom", "Vodka", "Tequila", "Gin", "Whiskey", "Övriga")
-    private var checkedProperties = arrayListOf(false, false, false, false, false)
-    private var checkedDrinkBases = arrayListOf(false, false, false, false, false, false)
+    private val baseSpiritsList = arrayOf("Rom", "Vodka", "Tequila", "Gin", "Whiskey", "Övriga")
     private var activeDrinkPosition = 0
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -42,21 +41,55 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initializeListView(getDrinksFromDB(LikeState.IGNORE, currentFilter))
+        if(!isInstantiated){
+            filterDialogFragment = FilterDialogFragment()
+            filterDialogFragment.newInstance(propertiesList, baseSpiritsList)
+            filterDialogFragment.setTargetFragment(this, 0)
 
-        filterDialogFrag = FilterDialogFragment()
-        filterDialogFrag.newInstance(propertiesList,
-                                    ingredientsList,
-                                    checkedProperties,
-                                    checkedDrinkBases)
-        filterDialogFrag.setTargetFragment(this, 0)
+            isInstantiated = true
+        }
+
+        initializeListView(getDrinksFromDB(LikeState.IGNORE, currentFilter))
 
         this.setHasOptionsMenu(true)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater!!.inflate(R.menu.main_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun initializeListView(drinkList: ArrayList<SimpleDrink>){
+
+        adapter = DrinkAdapter(activity, drinkList, this)
+
+        mainDrinkList.adapter = adapter
+        mainDrinkList.setOnItemClickListener { parent, view, position, id ->
+            activeDrinkPosition = position
+            val drinkID = adapter.getItem(position).id
+            val intent = newIntent(activity, drinkID)
+            startActivityForResult(intent, 1)
+        }
+    }
+
+    private fun getDrinksFromDB(isLiked: LikeState, filter: Filter? = null) : ArrayList<SimpleDrink> {
+        val db = DBHelper(activity)
+        return db.getDrinksByFilter(isLiked, filter)
+    }
+
+    private fun updateListView(drinkList: ArrayList<SimpleDrink>){
+        adapter.clear()
+
+        if(drinkList.isNotEmpty()){
+            adapter.addAll(drinkList)
+            noMatchText.visibility = View.INVISIBLE
+        }else{
+            noMatchText.visibility = View.VISIBLE
+        }
+    }
+
     fun resetFragment(){
-        checkedProperties = arrayListOf(false, false, false, false, false)
-        checkedDrinkBases = arrayListOf(false, false, false, false, false, false)
+        filterDialogFragment.resetDialogFragment()
         updateListView(getDrinksFromDB(LikeState.IGNORE))
         mainDrinkList.setSelectionAfterHeaderView()
     }
@@ -76,59 +109,19 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
         }
     }
 
-    private fun getDrinksFromDB(isLiked: LikeState, filter: Filter? = null) : ArrayList<SimpleDrink> {
-        val db = DBHelper(activity)
-        return db.getDrinksByFilter(isLiked, filter)
-    }
-
-    private fun initializeListView(drinkList: ArrayList<SimpleDrink>){
-
-        adapter = DrinkAdapter(activity, drinkList, this)
-
-        mainDrinkList.adapter = adapter
-        mainDrinkList.setOnItemClickListener { parent, view, position, id ->
-            activeDrinkPosition = position
-            val drinkID = adapter.getItem(position).id
-            val intent = newIntent(activity, drinkID)
-            startActivityForResult(intent, 1)
-        }
-    }
-
-    private fun updateListView(drinkList: ArrayList<SimpleDrink>){
-        adapter.clear()
-
-        if(drinkList.isNotEmpty()){
-            adapter.addAll(drinkList)
-            noMatchText.visibility = View.INVISIBLE
-        }else{
-            noMatchText.visibility = View.VISIBLE
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater!!.inflate(R.menu.main_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_filter) {
-            filterDialogFrag.show(fragmentManager, "Test")
-            filterDialogFrag.newInstance(propertiesList,
-                                        ingredientsList,
-                                        checkedProperties,
-                                        checkedDrinkBases)
+            filterDialogFragment.show(fragmentManager, "FilterDialog")
         }
         return super.onOptionsItemSelected(item)
     }
 
-    override fun filterClick(propertiesDialogCheckboxes: FilterDialogCheckboxes,
-                             drinkBaseDialogCheckboxes: FilterDialogCheckboxes,
+    override fun filterClick(propertiesDialogCheckboxes: ArrayList<String>,
+                             baseSpiritsDialogCheckboxes: ArrayList<String>,
                              checkOther:Boolean){
-        currentFilter = Filter(propertiesDialogCheckboxes.checkedBoxesNames,
-                                drinkBaseDialogCheckboxes.checkedBoxesNames,
+        currentFilter = Filter(propertiesDialogCheckboxes,
+                                baseSpiritsDialogCheckboxes,
                                 checkOther)
-        checkedProperties = propertiesDialogCheckboxes.checkedBoxes
-        checkedDrinkBases = drinkBaseDialogCheckboxes.checkedBoxes
 
         updateListView(getDrinksFromDB(LikeState.IGNORE, currentFilter))
     }
