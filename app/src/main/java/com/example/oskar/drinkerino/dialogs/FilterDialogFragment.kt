@@ -1,4 +1,4 @@
-package com.example.oskar.drinkerino
+package com.example.oskar.drinkerino.dialogs
 
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import com.example.oskar.drinkerino.R
 import com.example.oskar.drinkerino.interfaces.FilterDialogAction
-import kotlinx.android.synthetic.main.custom_dialog.*
-import kotlinx.android.synthetic.main.custom_dialog.view.*
+import kotlinx.android.synthetic.main.dialog_filter.*
+import kotlinx.android.synthetic.main.dialog_filter.view.*
 
 
 class FilterDialogFragment : DialogFragment(), FilterDialogAction {
@@ -36,7 +37,7 @@ class FilterDialogFragment : DialogFragment(), FilterDialogAction {
     override fun onCreateView(inflater: LayoutInflater?,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.custom_dialog, container)
+        val view = inflater!!.inflate(R.layout.dialog_filter, container)
 
         addCheckboxes(mPropertiesList, mBaseSpiritsList, view)
 
