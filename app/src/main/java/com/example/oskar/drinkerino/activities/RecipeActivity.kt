@@ -13,7 +13,7 @@ import com.example.oskar.drinkerino.R
 import com.example.oskar.drinkerino.data.DBHelper
 import com.example.oskar.drinkerino.enums.LikeState
 import com.example.oskar.drinkerino.objects.Drink
-import kotlinx.android.synthetic.main.activity_detailed_drink.*
+import kotlinx.android.synthetic.main.activity_recipe.*
 
 
 class RecipeActivity : AppCompatActivity() {
@@ -22,7 +22,7 @@ class RecipeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detailed_drink)
+        setContentView(R.layout.activity_recipe)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         val db = DBHelper(this)
