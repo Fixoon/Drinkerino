@@ -38,6 +38,24 @@ class LikesFragment : Fragment(), DrinkAdapterLikeAction {
         toggleText()
     }
 
+    private fun initializeListView(drinkList: ArrayList<SimpleDrink>){
+        adapter = DrinkAdapter(activity, drinkList, this)
+
+        val listView = likeDrinkList as ListView
+
+        listView.adapter = adapter
+        listView.setOnItemClickListener { parent, view, position, id ->
+            activeDrinkPosition = position
+            val drinkID = adapter.getItem(position).id
+            val intent = newIntent(activity, drinkID)
+            startActivityForResult(intent, 1)
+        }
+    }
+    private fun getDrinksFromDB(isLiked: LikeState) : ArrayList<SimpleDrink> {
+        val db = DBHelper(activity)
+        return db.getDrinksByFilter(isLiked)
+    }
+
     fun resetFragment(){
         likeDrinkList.setSelectionAfterHeaderView()
     }
@@ -72,24 +90,7 @@ class LikesFragment : Fragment(), DrinkAdapterLikeAction {
         }
     }
 
-    private fun getDrinksFromDB(isLiked: LikeState) : ArrayList<SimpleDrink> {
-        val db = DBHelper(activity)
-        return db.getDrinksByFilter(isLiked)
-    }
 
-    private fun initializeListView(drinkList: ArrayList<SimpleDrink>){
-        adapter = DrinkAdapter(activity, drinkList, this)
-
-        val listView = likeDrinkList as ListView
-
-        listView.adapter = adapter
-        listView.setOnItemClickListener { parent, view, position, id ->
-            activeDrinkPosition = position
-            val drinkID = adapter.getItem(position).id
-            val intent = newIntent(activity, drinkID)
-            startActivityForResult(intent, 1)
-        }
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
