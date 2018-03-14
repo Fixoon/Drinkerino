@@ -18,6 +18,7 @@ import com.example.oskar.drinkerino.data.DBHelper
 import com.example.oskar.drinkerino.enums.LikeState
 import com.example.oskar.drinkerino.interfaces.DrinkAdapterLikeAction
 import com.example.oskar.drinkerino.objects.SimpleDrink
+import kotlinx.android.synthetic.main.dialog_filter.*
 import kotlinx.android.synthetic.main.fragment_likes.*
 import java.util.*
 
@@ -35,7 +36,10 @@ class LikesFragment : Fragment(), DrinkAdapterLikeAction {
         super.onViewCreated(view, savedInstanceState)
 
         initializeListView(getDrinksFromDB(LikeState.LIKED))
+
         toggleText()
+
+        activity.title = getString(R.string.title_liked)
     }
 
     private fun initializeListView(drinkList: ArrayList<SimpleDrink>){

@@ -6,10 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
-import com.example.oskar.drinkerino.FilterDialogFragment
+import com.example.oskar.drinkerino.dialogs.FilterDialogFragment
 import com.example.oskar.drinkerino.R
 import com.example.oskar.drinkerino.activities.RecipeActivity
 import com.example.oskar.drinkerino.adapters.DrinkAdapter
@@ -50,6 +49,8 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
         }
 
         initializeListView(getDrinksFromDB(LikeState.IGNORE, currentFilter))
+
+        activity.title = getString(R.string.title_home)
 
         this.setHasOptionsMenu(true)
     }
