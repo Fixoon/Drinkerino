@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">Drinkerino</string>
-    <string name="title_home">Start</string>
+
+    <string name="title_home">Drinkerino</string>
+    <string name="title_liked">Gillade drinkar</string>
     <string name="title_settings">Inställningar</string>
-    <string name="title_liked">Gillade</string>
+
+    <string name="navigation_home">Start</string>
+    <string name="navigation_liked">Gillade</string>
+    <string name="navigation_settings">Inställningar</string>
 
     <string name="drink_ingredients">Ingridienser</string>
     <string name="drink_instructions">Instruktioner</string>
