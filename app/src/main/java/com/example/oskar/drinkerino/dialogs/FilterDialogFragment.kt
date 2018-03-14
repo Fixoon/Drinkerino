@@ -13,6 +13,12 @@ import kotlinx.android.synthetic.main.dialog_filter.view.*
 
 
 class FilterDialogFragment : DialogFragment(), FilterDialogAction {
+    private lateinit var mPropertiesList: Array<String>
+    private lateinit var mCheckedProperties: BooleanArray
+    private lateinit var mBaseSpiritsList: Array<String>
+    private lateinit var mCheckedBaseSpirits: BooleanArray
+    private lateinit var mCallback: FilterDialogAction
+
     fun newInstance(propertiesList:Array<String>,
                     ingredientsList:Array<String>): FilterDialogFragment {
 
@@ -125,13 +131,5 @@ class FilterDialogFragment : DialogFragment(), FilterDialogAction {
         mCheckedProperties = BooleanArray(mPropertiesList.size)
         mCheckedBaseSpirits = BooleanArray(mBaseSpiritsList.size)
 
-    }
-
-    companion object {
-        private lateinit var mPropertiesList: Array<String>
-        private lateinit var mCheckedProperties: BooleanArray
-        private lateinit var mBaseSpiritsList: Array<String>
-        private lateinit var mCheckedBaseSpirits: BooleanArray
-        private lateinit var mCallback: FilterDialogAction
     }
 }
