@@ -34,7 +34,7 @@ class RecipeActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.recipe_menu, menu)
         this.menu = menu
 
-        displayFullRecipe()
+        displayRecipe()
 
         return true
     }
@@ -50,7 +50,7 @@ class RecipeActivity : AppCompatActivity() {
         return true
     }
 
-    private fun createReturnIntent(){
+    private fun createReturnIntent() {
         val returnIntent = Intent()
         returnIntent.putExtra("LikeState", recipe.likeState)
         setResult(Activity.RESULT_OK, returnIntent)
@@ -63,25 +63,25 @@ class RecipeActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun likeToggle(){
+    private fun likeToggle() {
         val db = DBHelper(this)
-        if(recipe.likeState == LikeState.LIKED){
+        if (recipe.likeState == LikeState.LIKED) {
             db.setLikeState(recipe.id, LikeState.NOT_LIKED)
             menu.findItem(R.id.action_filter).icon = ContextCompat.getDrawable(this, R.drawable.ic_heart_outline)
             recipe.likeState = LikeState.NOT_LIKED
-        }else{
+        } else {
             db.setLikeState(recipe.id, LikeState.LIKED)
             menu.findItem(R.id.action_filter).icon = ContextCompat.getDrawable(this, R.drawable.ic_heart)
             recipe.likeState = LikeState.LIKED
         }
     }
 
-    private fun displayFullRecipe() {
+    private fun displayRecipe() {
         title = recipe.name
 
         drinkName.text = recipe.name
 
-        if(recipe.likeState == LikeState.LIKED){
+        if (recipe.likeState == LikeState.LIKED) {
             menu.findItem(R.id.action_filter).icon = ContextCompat.getDrawable(this, R.drawable.ic_heart)
         }
 

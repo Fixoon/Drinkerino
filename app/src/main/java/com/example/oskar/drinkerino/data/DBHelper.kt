@@ -16,7 +16,7 @@ import java.io.IOException
 import java.util.*
 
 
-class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 1) {
+class DBHelper(private var context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 1) {
 
     fun checkDBExist(): Boolean {
         var checkDB: SQLiteDatabase? = null
@@ -68,7 +68,7 @@ class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAM
         var ingredients = arrayOf<String>()
         var measurements = arrayOf<String>()
         var property = arrayOf<String>()
-        var tools:Array<String> = arrayOf()
+        var tools: Array<String> = arrayOf()
         var instructions = ""
 
         val selectionArgs = arrayOf(idString, idString, idString, idString, idString, idString)
@@ -116,21 +116,21 @@ class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAM
         var other = ")"
 
 
-        if(filter != null){
-            if(!filter.properties.isEmpty()){
+        if (filter != null) {
+            if (!filter.properties.isEmpty()) {
                 searchProps = "AND DrinkProps.DrinkID IN (SELECT DrinkProps.DrinkID FROM DrinkProps " +
                         "INNER JOIN Properties ON DrinkProps.PropertyID=Properties.PropertyID " +
                         "WHERE Properties.Property IN ('" + filter.properties.joinToString("','") + "'))"
             }
-            if(filter.drinkBaseOther){
+            if (filter.drinkBaseOther) {
                 other = "OR Drinks.BaseSpirit NOT IN ('Rom', 'Vodka', 'Tequila', 'Gin', 'Whiskey'))"
             }
-            if(!filter.drinkBase.isEmpty()){
+            if (!filter.drinkBase.isEmpty()) {
                 searchIngredients = "AND (Drinks.BaseSpirit IN " +
                         "('" + filter.drinkBase.joinToString("','") + "')" + other
             }
         }
-        if(isLiked != LikeState.IGNORE){
+        if (isLiked != LikeState.IGNORE) {
             searchLikes = "AND Drinks.IsLiked IN (" + isLiked.boolInt + ")"
         }
 
@@ -146,10 +146,10 @@ class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAM
         if (cursor.moveToFirst()) {
             do {
                 drinkList.add(SimpleDrink(cursor.getString(1),
-                                            cursor.getString(4),
-                                            cursor.getInt(0),
-                                            LikeState.fromInt(cursor.getInt(2))!!,
-                                            DrinkGlass.fromInt(cursor.getInt(3))!!))
+                        cursor.getString(4),
+                        cursor.getInt(0),
+                        LikeState.fromInt(cursor.getInt(2))!!,
+                        DrinkGlass.fromInt(cursor.getInt(3))!!))
             } while (cursor.moveToNext())
         }
 
@@ -160,7 +160,7 @@ class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAM
         return drinkList
     }
 
-    fun setLikeState(id: Int, likeState: LikeState){
+    fun setLikeState(id: Int, likeState: LikeState) {
         val db = this.writableDatabase
         val idString = id.toString()
 
@@ -171,14 +171,14 @@ class DBHelper (private var context: Context) : SQLiteOpenHelper(context, DB_NAM
         db.close()
     }
 
-    override fun onUpgrade(db : SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         copyDataBase()
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
 
     }
-    
+
     companion object {
         @SuppressLint("SdCardPath")
         private val DB_PATH = "/data/data/com.example.oskar.drinkerino/databases/"

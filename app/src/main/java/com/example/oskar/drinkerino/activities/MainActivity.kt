@@ -17,34 +17,34 @@ class MainActivity : AppCompatActivity() {
 
     private val mOnNavigationItemSelectedListener =
             BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_home -> {
-                supportFragmentManager.beginTransaction().replace(
-                        R.id.frameLayout,
-                        mainFragment,
-                        "mainFragment").commit()
-                val mainFragmentByTag = mainFragment.fragmentManager.findFragmentByTag("mainFragment")
-                if(mainFragmentByTag != null && mainFragmentByTag.isVisible){
-                    mainFragment.resetFragment()
+                when (item.itemId) {
+                    R.id.navigation_home -> {
+                        supportFragmentManager.beginTransaction().replace(
+                                R.id.frameLayout,
+                                mainFragment,
+                                "mainFragment").commit()
+                        val mainFragmentByTag = mainFragment.fragmentManager.findFragmentByTag("mainFragment")
+                        if (mainFragmentByTag != null && mainFragmentByTag.isVisible) {
+                            mainFragment.resetFragment()
+                        }
+                        return@OnNavigationItemSelectedListener true
+                    }
+                    R.id.navigation_liked -> {
+                        supportFragmentManager.beginTransaction().replace(R.id.frameLayout,
+                                likesFragment,
+                                "likesFragment").commit()
+                        val likesFragmentByTag = likesFragment.fragmentManager.findFragmentByTag("likesFragment")
+                        if (likesFragmentByTag != null && likesFragmentByTag.isVisible) {
+                            likesFragment.resetFragment()
+                        }
+                        return@OnNavigationItemSelectedListener true
+                    }
+                    R.id.navigation_settings -> {
+                        return@OnNavigationItemSelectedListener true
+                    }
                 }
-                return@OnNavigationItemSelectedListener true
+                false
             }
-            R.id.navigation_liked -> {
-                supportFragmentManager.beginTransaction().replace(R.id.frameLayout,
-                                                                likesFragment,
-                                                                "likesFragment").commit()
-                val likesFragmentByTag = likesFragment.fragmentManager.findFragmentByTag("likesFragment")
-                if(likesFragmentByTag != null && likesFragmentByTag.isVisible){
-                    likesFragment.resetFragment()
-                }
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_settings -> {
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
         val db = DBHelper(this)
 
-        if(!db.checkDBExist()){
+        if (!db.checkDBExist()) {
             try {
                 db.copyDataBase()
             } catch (ioe: IOException) {

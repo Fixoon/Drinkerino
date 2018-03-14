@@ -26,7 +26,7 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
     private lateinit var adapter: DrinkAdapter
     private lateinit var filterDialogFragment: FilterDialogFragment
     private var isInstantiated = false
-    private var currentFilter:Filter? = null
+    private var currentFilter: Filter? = null
     private val propertiesList = arrayOf("Söt", "Sur", "Besk", "Syrlig", "Salt")
     private val baseSpiritsList = arrayOf("Rom", "Vodka", "Tequila", "Gin", "Whiskey", "Övriga")
     private var activeDrinkPosition = 0
@@ -40,7 +40,7 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(!isInstantiated){
+        if (!isInstantiated) {
             filterDialogFragment = FilterDialogFragment()
             filterDialogFragment.newInstance(propertiesList, baseSpiritsList)
             filterDialogFragment.setTargetFragment(this, 0)
@@ -60,7 +60,7 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private fun initializeListView(drinkList: ArrayList<SimpleDrink>){
+    private fun initializeListView(drinkList: ArrayList<SimpleDrink>) {
 
         adapter = DrinkAdapter(activity, drinkList, this)
 
@@ -73,38 +73,38 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
         }
     }
 
-    private fun getDrinksFromDB(isLiked: LikeState, filter: Filter? = null) : ArrayList<SimpleDrink> {
+    private fun getDrinksFromDB(isLiked: LikeState, filter: Filter? = null): ArrayList<SimpleDrink> {
         val db = DBHelper(activity)
         return db.getDrinksByFilter(isLiked, filter)
     }
 
-    private fun updateListView(drinkList: ArrayList<SimpleDrink>){
+    private fun updateListView(drinkList: ArrayList<SimpleDrink>) {
         adapter.clear()
 
-        if(drinkList.isNotEmpty()){
+        if (drinkList.isNotEmpty()) {
             adapter.addAll(drinkList)
             noMatchText.visibility = View.INVISIBLE
-        }else{
+        } else {
             noMatchText.visibility = View.VISIBLE
         }
     }
 
-    fun resetFragment(){
+    fun resetFragment() {
         filterDialogFragment.resetDialogFragment()
         updateListView(getDrinksFromDB(LikeState.IGNORE))
         mainDrinkList.setSelectionAfterHeaderView()
     }
 
-    override fun likeToggle(position:Int, retView:View){
+    override fun likeToggle(position: Int, retView: View) {
         val drink: SimpleDrink = adapter.getItem(position)
         val db = DBHelper(activity)
         val likeAnimation = AnimationUtils.loadAnimation(context, R.anim.pulse)
 
-        if(drink.likeState == LikeState.NOT_LIKED){
+        if (drink.likeState == LikeState.NOT_LIKED) {
             db.setLikeState(drink.id, LikeState.LIKED)
             drink.likeState = LikeState.LIKED
             retView.likePicture.startAnimation(likeAnimation)
-        }else{
+        } else {
             db.setLikeState(drink.id, LikeState.NOT_LIKED)
             drink.likeState = LikeState.NOT_LIKED
         }
@@ -119,17 +119,15 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
 
     override fun filterClick(propertiesDialogCheckboxes: ArrayList<String>,
                              baseSpiritsDialogCheckboxes: ArrayList<String>,
-                             checkOther:Boolean){
-        currentFilter = Filter(propertiesDialogCheckboxes,
-                                baseSpiritsDialogCheckboxes,
-                                checkOther)
+                             checkOther: Boolean) {
+        currentFilter = Filter(propertiesDialogCheckboxes, baseSpiritsDialogCheckboxes, checkOther)
 
         updateListView(getDrinksFromDB(LikeState.IGNORE, currentFilter))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            val result:LikeState = data!!.getSerializableExtra("LikeState") as LikeState
+            val result: LikeState = data!!.getSerializableExtra("LikeState") as LikeState
             val drink: SimpleDrink = adapter.getItem(activeDrinkPosition)
             drink.likeState = result
             adapter.notifyDataSetChanged()
@@ -139,7 +137,7 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction {
     companion object {
         fun newIntent(context: Context, drinkID: Int): Intent {
             val intent = Intent(context, RecipeActivity::class.java)
-            intent.putExtra("drink_id" , drinkID)
+            intent.putExtra("drink_id", drinkID)
             return intent
         }
     }
