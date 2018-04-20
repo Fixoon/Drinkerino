@@ -15,3 +15,6 @@ Don't take the recipes seriously. I haven't tested any of them.
 Feel free to come with suggestions.
 
 Thanks.
+
+Update (2018-04-20): 
+I have now switched to using MVP. I have also fixed so that the app handles rotations properly.
