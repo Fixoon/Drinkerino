@@ -1,7 +1,5 @@
 package com.example.oskar.drinkerino.activities
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -25,7 +23,7 @@ class RecipeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_recipe)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        val db = DBHelper(this)
+        val db = DBHelper()
 
         recipe = db.getFullRecipe(intent.getIntExtra("drink_id", 0))
     }
@@ -39,21 +37,9 @@ class RecipeActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onBackPressed() {
-        createReturnIntent()
-        super.onBackPressed()
-    }
-
     override fun onSupportNavigateUp(): Boolean {
-        createReturnIntent()
         finish()
         return true
-    }
-
-    private fun createReturnIntent() {
-        val returnIntent = Intent()
-        returnIntent.putExtra("LikeState", recipe.likeState)
-        setResult(Activity.RESULT_OK, returnIntent)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -64,7 +50,7 @@ class RecipeActivity : AppCompatActivity() {
     }
 
     private fun likeToggle() {
-        val db = DBHelper(this)
+        val db = DBHelper()
         if (recipe.likeState == LikeState.LIKED) {
             db.setLikeState(recipe.id, LikeState.NOT_LIKED)
             menu.findItem(R.id.action_filter).icon = ContextCompat.getDrawable(this, R.drawable.ic_heart_outline)
