@@ -17,4 +17,4 @@ Feel free to come with suggestions.
 Thanks.
 
 Update (2018-04-20): 
-I have now switched to using MVP. I have also fixed so that the app handles rotations properly.
+I have now switched to using MVP. I've also made changes so that ListView and FilterDialogFragment now handles rotatoins properly.
