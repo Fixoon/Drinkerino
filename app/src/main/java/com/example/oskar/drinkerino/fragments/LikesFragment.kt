@@ -1,115 +1,107 @@
 package com.example.oskar.drinkerino.fragments
 
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v4.app.LoaderManager
+import android.support.v4.content.Loader
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import com.example.oskar.drinkerino.R
 import com.example.oskar.drinkerino.activities.RecipeActivity
 import com.example.oskar.drinkerino.adapters.DrinkAdapter
-import com.example.oskar.drinkerino.data.DBHelper
-import com.example.oskar.drinkerino.enums.LikeState
 import com.example.oskar.drinkerino.interfaces.DrinkAdapterLikeAction
-import com.example.oskar.drinkerino.objects.Drink
+import com.example.oskar.drinkerino.interfaces.LikesContract
 import com.example.oskar.drinkerino.objects.SimpleDrink
+import com.example.oskar.drinkerino.presenters.LikesPresenter
+import com.example.oskar.drinkerino.presenters.PresenterLoader
 import kotlinx.android.synthetic.main.fragment_likes.*
-import java.util.*
 
 
-class LikesFragment : Fragment(), DrinkAdapterLikeAction {
+class LikesFragment : Fragment(), DrinkAdapterLikeAction, LikesContract.View, LoaderManager.LoaderCallbacks<LikesPresenter> {
     private lateinit var adapter: DrinkAdapter
-    private var activeDrinkPosition = 0
+    private var presenter: LikesPresenter? = null
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_likes, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initializeListView(getDrinksFromDB(LikeState.LIKED))
-
-        toggleText()
-
         activity.title = getString(R.string.title_liked)
-    }
 
-    private fun initializeListView(drinkList: ArrayList<SimpleDrink>) {
-        adapter = DrinkAdapter(activity, drinkList, this)
-
-        val listView = likeDrinkList as ListView
-
-        listView.adapter = adapter
-        listView.setOnItemClickListener { parent, view, position, id ->
-            activeDrinkPosition = position
-            val intent = newIntent(activity, adapter.getItem(position).id)
-            startActivityForResult(intent, 1)
+        adapter = DrinkAdapter(activity, arrayListOf(), this)
+        likeDrinkList.adapter = adapter
+        likeDrinkList.setOnItemClickListener { parent, view, position, id ->
+            presenter!!.onItemClicked(adapter.getItem(position))
         }
     }
 
-    private fun getDrinksFromDB(isLiked: LikeState): ArrayList<SimpleDrink> {
-        val db = DBHelper(activity)
-        return db.getDrinksByFilter(isLiked)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        activity.supportLoaderManager.initLoader(1002, null, this)
     }
 
-    private fun toggleText() {
-        if (!adapter.isEmpty) {
-            noLikedText.visibility = View.INVISIBLE
-        } else {
-            noLikedText.visibility = View.VISIBLE
-        }
+    override fun onResume() {
+        super.onResume()
+        presenter!!.attachView(this)
+    }
+
+    override fun onPause() {
+        presenter!!.detachView()
+        super.onPause()
+    }
+
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<LikesPresenter> {
+        return PresenterLoader(context, LikesPresenter())
+    }
+
+    override fun onLoadFinished(loader: Loader<LikesPresenter>?, data: LikesPresenter?) {
+        this.presenter = data
+    }
+
+    override fun onLoaderReset(loader: Loader<LikesPresenter>?) {
+        this.presenter = null
+    }
+
+    override fun setDrinkList(drinkList: ArrayList<SimpleDrink>) {
+        adapter.clear()
+        adapter.addAll(drinkList)
+    }
+
+    override fun showNoLikesText() {
+        noLikedText.visibility = View.VISIBLE
+    }
+
+    override fun hideNoLikesText() {
+        noLikedText.visibility = View.INVISIBLE
+    }
+
+    override fun navigateToRecipe(drinkID: Int){
+        val intent = newIntent(activity, drinkID)
+        startActivityForResult(intent, 1)
+    }
+
+    override fun likeToggle(position: Int) {
+        val drink: SimpleDrink = adapter.getItem(position)
+
+        presenter!!.likeToggle(drink, position)
+
+        val snackbar = Snackbar.make(view!!,drink.name + " " + getString(R.string.snackbar_drink_removed), Snackbar.LENGTH_LONG)
+        snackbar.setAction(R.string.snackbar_drink_undo, {
+            presenter!!.likeToggle(drink, position)
+        })
+        snackbar.show()
     }
 
     fun resetFragment() {
         likeDrinkList.setSelectionAfterHeaderView()
     }
 
-    override fun likeToggle(position: Int, retView: View) {
-        val drink: SimpleDrink = adapter.getItem(position)
-        val db = DBHelper(context)
-
-        db.setLikeState(drink.id, LikeState.NOT_LIKED)
-        drink.likeState = LikeState.NOT_LIKED
-        adapter.drinks.removeAt(position)
-
-        toggleText()
-
-        val undoSnackbar = Snackbar.make(view!!, drink.name + " " + getString(R.string.snackbar_drink_removed), Snackbar.LENGTH_LONG)
-        undoSnackbar.setAction(R.string.snackbar_drink_undo, { view ->
-            undoSnackbar(position, drink, db)
-        })
-        undoSnackbar.show()
-    }
-
-    private fun undoSnackbar(position: Int, drink: SimpleDrink, db: DBHelper) {
-        drink.likeState = LikeState.LIKED
-        adapter.drinks.add(position, drink)
-        adapter.notifyDataSetChanged()
-
-        db.setLikeState(drink.id, LikeState.LIKED)
-
-        toggleText()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            val result: LikeState = data!!.getSerializableExtra("LikeState") as LikeState
-            if (result == LikeState.NOT_LIKED) {
-                adapter.drinks.removeAt(activeDrinkPosition)
-                toggleText()
-                adapter.notifyDataSetChanged()
-            }
-        }
-    }
 
     companion object {
         fun newIntent(context: Context, drinkID: Int): Intent {
