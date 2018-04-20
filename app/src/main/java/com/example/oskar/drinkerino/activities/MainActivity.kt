@@ -10,33 +10,42 @@ import com.example.oskar.drinkerino.fragments.MainFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.IOException
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
 
-    private val mainFragment = MainFragment()
-    private val likesFragment = LikesFragment()
+    private var mainFragment = MainFragment()
+    private var likesFragment = LikesFragment()
 
     private val mOnNavigationItemSelectedListener =
             BottomNavigationView.OnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.navigation_home -> {
+                        var mainFragmentByTag = supportFragmentManager.findFragmentByTag("mainFragment") as MainFragment?
+                        if (mainFragmentByTag != null && mainFragmentByTag.isVisible) {
+                            mainFragmentByTag.resetFragment()
+                        }
+                        if(mainFragmentByTag == null){
+                            mainFragmentByTag = mainFragment
+                        }
                         supportFragmentManager.beginTransaction().replace(
                                 R.id.frameLayout,
-                                mainFragment,
+                                mainFragmentByTag,
                                 "mainFragment").commit()
-                        val mainFragmentByTag = mainFragment.fragmentManager.findFragmentByTag("mainFragment")
-                        if (mainFragmentByTag != null && mainFragmentByTag.isVisible) {
-                            mainFragment.resetFragment()
-                        }
+
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_liked -> {
-                        supportFragmentManager.beginTransaction().replace(R.id.frameLayout,
-                                likesFragment,
-                                "likesFragment").commit()
-                        val likesFragmentByTag = likesFragment.fragmentManager.findFragmentByTag("likesFragment")
+                        var likesFragmentByTag = supportFragmentManager.findFragmentByTag("likesFragment") as LikesFragment?
                         if (likesFragmentByTag != null && likesFragmentByTag.isVisible) {
-                            likesFragment.resetFragment()
+                            likesFragmentByTag.resetFragment()
                         }
+                        if(likesFragmentByTag == null){
+                            likesFragmentByTag = likesFragment
+                        }
+                        supportFragmentManager.beginTransaction().replace(
+                                R.id.frameLayout,
+                                likesFragmentByTag,
+                                "likesFragment").commit()
+
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_settings -> {
@@ -46,11 +55,12 @@ class MainActivity : AppCompatActivity() {
                 false
             }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val db = DBHelper(this)
+        val db = DBHelper()
 
         if (!db.checkDBExist()) {
             try {
@@ -60,7 +70,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        supportFragmentManager.beginTransaction().replace(R.id.frameLayout, mainFragment).commit()
+        if(savedInstanceState == null){
+            supportFragmentManager.beginTransaction().add(R.id.frameLayout, mainFragment, "mainFragment").commit()
+        }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
