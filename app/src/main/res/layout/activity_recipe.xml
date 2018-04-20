@@ -45,7 +45,7 @@
     <LinearLayout
         android:id="@+id/ingredientsLayout"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_weight="1"
@@ -58,7 +58,7 @@
     <LinearLayout
         android:id="@+id/measurementLayout"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_weight="2"
@@ -96,7 +96,7 @@
     <LinearLayout
         android:id="@+id/instructionsLayout"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
