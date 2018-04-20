@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.oskar.drinkerino.enums.LikeState
@@ -24,7 +25,6 @@ class DrinkAdapter constructor(context: Context, val drinks: ArrayList<SimpleDri
             context.getDrawable(R.drawable.ic_glass_tulip),
             context.getDrawable(R.drawable.ic_glass_flute))
 
-
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
         val retView: View = convertView
                 ?: layoutInflater.inflate(R.layout.item_drink, parent, false)
@@ -33,6 +33,7 @@ class DrinkAdapter constructor(context: Context, val drinks: ArrayList<SimpleDri
         val drinkName = retView.drinkName as TextView
         val drinkProps = retView.drinkProps as TextView
         var drinkPropertyNames = drink.properties.replace(",", ", ")
+        val likeAnimation = AnimationUtils.loadAnimation(context, R.anim.pulse)
 
         drinkPropertyNames = drinkPropertyNames.substring(0, 1).toUpperCase() + drinkPropertyNames.substring(1).toLowerCase()
 
@@ -40,10 +41,12 @@ class DrinkAdapter constructor(context: Context, val drinks: ArrayList<SimpleDri
         drinkProps.text = (drinkPropertyNames)
 
         retView.likePicture.setOnClickListener {
-            callback.likeToggle(position, retView)
+            callback.likeToggle(position)
+            if (drink.likeState == LikeState.LIKED) {
+                retView.likePicture.startAnimation(likeAnimation)
+            }
             notifyDataSetChanged()
         }
-
 
         retView.likePicture.setImageDrawable(heartImageArray[drink.likeState.boolInt!!])
         if (drink.likeState == LikeState.LIKED) {
@@ -57,5 +60,4 @@ class DrinkAdapter constructor(context: Context, val drinks: ArrayList<SimpleDri
 
         return retView
     }
-
 }
