@@ -2,10 +2,10 @@ package com.example.oskar.drinkerino.data
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.oskar.drinkerino.MainApplication
 import com.example.oskar.drinkerino.enums.DrinkGlass
 import com.example.oskar.drinkerino.enums.LikeState
 import com.example.oskar.drinkerino.objects.Drink
@@ -16,7 +16,7 @@ import java.io.IOException
 import java.util.*
 
 
-class DBHelper(private var context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 1) {
+class DBHelper : SQLiteOpenHelper(MainApplication.getContext(), DB_NAME, null, 1) {
 
     fun checkDBExist(): Boolean {
         var checkDB: SQLiteDatabase? = null
@@ -38,7 +38,7 @@ class DBHelper(private var context: Context) : SQLiteOpenHelper(context, DB_NAME
     fun copyDataBase() {
 
         try {
-            val assetFile = context.assets.open(DB_NAME)
+            val assetFile = MainApplication.getContext().assets.open(DB_NAME)
             val outputFile = FileOutputStream(DB_PATH + DB_NAME)
             val buffer = ByteArray(1024)
 
