@@ -14,6 +14,7 @@ import com.example.oskar.drinkerino.objects.SimpleDrink
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
+import java.io.File
 
 
 class DBHelper : SQLiteOpenHelper(MainApplication.getContext(), DB_NAME, null, 1) {
@@ -36,7 +37,6 @@ class DBHelper : SQLiteOpenHelper(MainApplication.getContext(), DB_NAME, null, 1
 
     @Throws(IOException::class)
     fun copyDataBase() {
-
         try {
             val assetFile = MainApplication.getContext().assets.open(DB_NAME)
             val outputFile = FileOutputStream(DB_PATH + DB_NAME)
@@ -44,9 +44,17 @@ class DBHelper : SQLiteOpenHelper(MainApplication.getContext(), DB_NAME, null, 1
 
             var length = assetFile.read(buffer)
             while (length > 0) {
+
                 outputFile.write(buffer, 0, length)
                 length = assetFile.read(buffer)
             }
+
+            //These files gets created on Android P Dev 1 and messes with accessing the database
+            //that gets copied here so they need to be deleted.
+            val walDBFile = File(DB_PATH + DB_NAME + "-wal")
+            val shmDBFile = File(DB_PATH + DB_NAME + "-shm")
+            walDBFile.delete()
+            shmDBFile.delete()
 
             outputFile.flush()
             outputFile.close()
