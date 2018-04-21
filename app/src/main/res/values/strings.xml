@@ -32,4 +32,17 @@
 
     <string name="menu_filter">Filtrera</string>
     <string name="menu_like">Gilla</string>
+
+    <string name="property_sweet">Söt</string>
+    <string name="property_sour">Sur</string>
+    <string name="property_bitter">Besk</string>
+    <string name="property_acidic">Syrlig</string>
+    <string name="property_salt">Salt</string>
+
+    <string name="spirit_rum">Rom</string>
+    <string name="spirit_vodka">Vodka</string>
+    <string name="spirit_tequila">Tequila</string>
+    <string name="spirit_gin">Gin</string>
+    <string name="spirit_whiskey">Whiskey</string>
+    <string name="spirit_others">Övriga</string>
 </resources>
