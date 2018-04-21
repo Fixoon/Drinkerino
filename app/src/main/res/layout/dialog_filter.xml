@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/propTitle"
+        android:id="@+id/topLinearLayoutTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/dialogTitle" />
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/topLinearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
@@ -42,10 +42,10 @@
         android:weightSum="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/propTitle">
+        app:layout_constraintTop_toBottomOf="@+id/topLinearLayoutTitle">
 
         <LinearLayout
-            android:id="@+id/propertyLayoutLeft"
+            android:id="@+id/topLinearLayoutLeft"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -57,7 +57,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/propertyLayoutRight"
+            android:id="@+id/topLinearLayoutRight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -69,7 +69,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/spiritTitle"
+        android:id="@+id/bottomLinearLayoutTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -78,10 +78,10 @@
         android:textColor="@android:color/background_dark"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/topLinearLayout" />
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/bottomLinearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
@@ -92,10 +92,10 @@
         android:weightSum="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spiritTitle">
+        app:layout_constraintTop_toBottomOf="@+id/bottomLinearLayoutTitle">
 
         <LinearLayout
-            android:id="@+id/baseSpiritLayoutLeft"
+            android:id="@+id/bottomLinearLayoutLeft"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -107,7 +107,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/baseSpiritLayoutRight"
+            android:id="@+id/bottomLinearLayoutRight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -129,7 +129,7 @@
         android:text="@string/filter_cancel_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/actionButton"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+        app:layout_constraintTop_toBottomOf="@+id/bottomLinearLayout" />
 
     <Button
         android:id="@+id/actionButton"
@@ -142,5 +142,5 @@
         android:text="@string/filter_filter_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+        app:layout_constraintTop_toBottomOf="@+id/bottomLinearLayout" />
 </android.support.constraint.ConstraintLayout>
