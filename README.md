@@ -8,7 +8,7 @@ The name "Drinkerino" is nothing serious.
 
 The app is not perfect, many things could probably be done better. I'll update the app sometimes when I feel like it
 
-The app doesn't work properly in Android P dp1. I'll fix it before Android P is released.
+~~The app doesn't work properly in Android P dp1. I'll fix it before Android P is released.~~ Fixed.
 
 Don't take the recipes seriously. I haven't tested any of them.
 
