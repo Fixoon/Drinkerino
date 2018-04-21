@@ -18,3 +18,5 @@ Thanks.
 
 Update (2018-04-20): 
 I have now switched to using MVP. I've also made changes so that MainFragment, LikesFragment and FilterDialogFragment now handles rotations properly.
+
+Known problems: Filter dialog doesn't display properly on devices with DPI level of 640 (i.e. Galaxy S(6-9) & LG G(4-6)) in landscape.
