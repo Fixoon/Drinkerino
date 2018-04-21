@@ -1,6 +1,7 @@
 package com.example.oskar.drinkerino.dialogs
 
 import android.content.DialogInterface
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.LoaderManager
@@ -44,7 +45,7 @@ class FilterDialogFragment : DialogFragment(), FilterDialogAction, FilterDialogC
 
         view.actionButton.setOnClickListener {
             val checkBoxes = getCheckedBoxes()
-            mCallback.filterClick(checkBoxes[0] as ArrayList<String>, checkBoxes[1] as ArrayList<String>, (baseSpiritLayoutRight.getChildAt(2) as CheckBox).isChecked)
+            mCallback.filterClick(checkBoxes[0] as ArrayList<String>, checkBoxes[1] as ArrayList<String>, (bottomLinearLayoutRight.getChildAt(2) as CheckBox).isChecked)
             presenter!!.updateCheckedBoxes(checkBoxes[2] as BooleanArray, checkBoxes[3] as BooleanArray)
             temporaryCheckBoxState = false
             dismiss()
@@ -100,81 +101,81 @@ class FilterDialogFragment : DialogFragment(), FilterDialogAction, FilterDialogC
         super.onDestroyView()
     }
 
-    override fun addCheckboxes(propertiesList: Array<String>, ingredientsList: Array<String>, mCheckedProperties: BooleanArray, mCheckedBaseSpirits: BooleanArray) {
-        propertyLayoutLeft.removeAllViews()
-        propertyLayoutRight.removeAllViews()
-        baseSpiritLayoutLeft.removeAllViews()
-        baseSpiritLayoutRight.removeAllViews()
+    override fun addCheckboxes(topCheckBoxNames: Array<String>, bottomCheckBoxNames: Array<String>, topCheckedBoxes: BooleanArray, bottomCheckedBoxes: BooleanArray) {
+        topLinearLayoutLeft.removeAllViews()
+        topLinearLayoutRight.removeAllViews()
+        bottomLinearLayoutLeft.removeAllViews()
+        bottomLinearLayoutRight.removeAllViews()
 
-        propertiesList.forEachIndexed { index, s ->
+        topCheckBoxNames.forEachIndexed { index, s ->
             val newCheckBox = CheckBox(activity)
-            newCheckBox.isChecked = mCheckedProperties[index]
+            newCheckBox.isChecked = topCheckedBoxes[index]
             newCheckBox.text = s
             if (index % 2 == 1) {
-                view!!.propertyLayoutRight.addView(newCheckBox)
+                view!!.topLinearLayoutRight.addView(newCheckBox)
             } else {
-                view!!.propertyLayoutLeft.addView(newCheckBox)
+                view!!.topLinearLayoutLeft.addView(newCheckBox)
             }
         }
-        ingredientsList.forEachIndexed { index, s ->
+        bottomCheckBoxNames.forEachIndexed { index, s ->
             val newCheckBox = CheckBox(activity)
-            newCheckBox.isChecked = mCheckedBaseSpirits[index]
+            newCheckBox.isChecked = bottomCheckedBoxes[index]
             newCheckBox.text = s
             if (index % 2 == 1) {
-                view!!.baseSpiritLayoutRight.addView(newCheckBox)
+                view!!.bottomLinearLayoutRight.addView(newCheckBox)
             } else {
-                view!!.baseSpiritLayoutLeft.addView(newCheckBox)
+                view!!.bottomLinearLayoutLeft.addView(newCheckBox)
             }
         }
     }
 
     private fun getCheckedBoxes(): Array<Any> {
-        val properties: ArrayList<Any> = arrayListOf()
-        val baseSpirits: ArrayList<Any> = arrayListOf()
+        val topCheckedBoxesNames: ArrayList<Any> = arrayListOf()
+        val bottomCheckedBoxesNames: ArrayList<Any> = arrayListOf()
 
-        val propertyChildren = propertyLayoutLeft.childCount + propertyLayoutRight.childCount
-        val baseSpiritChildren = baseSpiritLayoutLeft.childCount + baseSpiritLayoutRight.childCount
+        val topCheckBoxCount = topLinearLayoutLeft.childCount + topLinearLayoutRight.childCount
+        val bottomCheckBoxCount = bottomLinearLayoutLeft.childCount + bottomLinearLayoutRight.childCount
 
-        val checkedProperties = BooleanArray(propertyChildren)
-        val checkedBaseSpirits = BooleanArray(baseSpiritChildren)
+        val topCheckBoxStates = BooleanArray(topCheckBoxCount)
+        val bottomCheckBoxStates = BooleanArray(bottomCheckBoxCount)
 
-        var propertyIndex = 0
-        for (i in 0 until propertyChildren) {
+        var topIndex = 0
+        for (i in 0 until topCheckBoxCount) {
             if (i % 2 == 0) {
-                val checkBox = propertyLayoutLeft.getChildAt(propertyIndex) as CheckBox
-                checkedProperties[i] = checkBox.isChecked
+                val checkBox = topLinearLayoutLeft.getChildAt(topIndex) as CheckBox
+                topCheckBoxStates[i] = checkBox.isChecked
                 if (checkBox.isChecked) {
-                    properties.add(checkBox.text.toString())
+                    topCheckedBoxesNames.add(checkBox.text.toString())
                 }
             } else {
-                val checkBox = propertyLayoutRight.getChildAt(propertyIndex) as CheckBox
-                checkedProperties[i] = checkBox.isChecked
+                val checkBox = topLinearLayoutRight.getChildAt(topIndex) as CheckBox
+                topCheckBoxStates[i] = checkBox.isChecked
                 if (checkBox.isChecked) {
-                    properties.add(checkBox.text.toString())
+                    topCheckedBoxesNames.add(checkBox.text.toString())
                 }
-                propertyIndex++
+                topIndex++
             }
         }
 
-        var baseSpiritIndex = 0
-        for (i in 0 until baseSpiritChildren) {
+        var bottomIndex = 0
+        for (i in 0 until bottomCheckBoxCount) {
             if (i % 2 == 0) {
-                val checkBox = baseSpiritLayoutLeft.getChildAt(baseSpiritIndex) as CheckBox
-                checkedBaseSpirits[i] = checkBox.isChecked
+                val checkBox = bottomLinearLayoutLeft.getChildAt(bottomIndex) as CheckBox
+                bottomCheckBoxStates[i] = checkBox.isChecked
                 if (checkBox.isChecked) {
-                    baseSpirits.add(checkBox.text.toString())
+                    bottomCheckedBoxesNames.add(checkBox.text.toString())
                 }
             } else {
-                val checkBox = baseSpiritLayoutRight.getChildAt(baseSpiritIndex) as CheckBox
-                checkedBaseSpirits[i] = checkBox.isChecked
+                val checkBox = bottomLinearLayoutRight.getChildAt(bottomIndex) as CheckBox
+                bottomCheckBoxStates[i] = checkBox.isChecked
                 if (checkBox.isChecked) {
-                    baseSpirits.add(checkBox.text.toString())
+                    bottomCheckedBoxesNames.add(checkBox.text.toString())
                 }
-                baseSpiritIndex++
+                bottomIndex++
             }
         }
 
-        return arrayOf(properties, baseSpirits, checkedProperties, checkedBaseSpirits)
+        return arrayOf(topCheckedBoxesNames, bottomCheckedBoxesNames, topCheckBoxStates, bottomCheckBoxStates)
     }
 
     fun resetDialogFragment() {

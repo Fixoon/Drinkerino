@@ -1,17 +1,20 @@
 package com.example.oskar.drinkerino.presenters
 
+import com.example.oskar.drinkerino.data.StringProvider
 import com.example.oskar.drinkerino.interfaces.BasePresenter
 import com.example.oskar.drinkerino.interfaces.FilterDialogContract
 
 class FilterDialogPresenter : FilterDialogContract.Presenter, BasePresenter<FilterDialogContract.View> {
     private var filterDialogFragment: FilterDialogContract.View? = null
-    private var mPropertiesList: Array<String> = arrayOf("Söt", "Sur", "Besk", "Syrlig", "Salt")
-    private var mBaseSpiritsList: Array<String> = arrayOf("Rom", "Vodka", "Tequila", "Gin", "Whiskey", "Övriga")
-    private var mCheckedProperties: BooleanArray = BooleanArray(mPropertiesList.size)
-    private var mCheckedBaseSpirits: BooleanArray = BooleanArray(mBaseSpiritsList.size)
+    private var stringProvider = StringProvider()
+    private var mPropertiesList: Array<String> = stringProvider.getPropertiesStrings()
+    private var mBaseSpiritsList: Array<String> = stringProvider.getSpiritStrings()
 
-    private var mCheckedPropertiesTemp: BooleanArray = BooleanArray(mPropertiesList.size)
-    private var mCheckedBaseSpiritsTemp: BooleanArray = BooleanArray(mBaseSpiritsList.size)
+    private var mTopCheckedBoxes: BooleanArray = BooleanArray(mPropertiesList.size)
+    private var mBottomCheckedBoxes: BooleanArray = BooleanArray(mBaseSpiritsList.size)
+
+    private var mTopCheckedBoxesTemp: BooleanArray = BooleanArray(mPropertiesList.size)
+    private var mBottomCheckedBoxesTemp: BooleanArray = BooleanArray(mBaseSpiritsList.size)
 
     var tempList = false
 
@@ -27,34 +30,34 @@ class FilterDialogPresenter : FilterDialogContract.Presenter, BasePresenter<Filt
     private fun initialize(){
         if(filterDialogFragment != null){
             if(tempList){
-                filterDialogFragment!!.addCheckboxes(mPropertiesList, mBaseSpiritsList, mCheckedPropertiesTemp, mCheckedBaseSpiritsTemp)
+                filterDialogFragment!!.addCheckboxes(mPropertiesList, mBaseSpiritsList, mTopCheckedBoxesTemp, mBottomCheckedBoxesTemp)
             }else{
-                filterDialogFragment!!.addCheckboxes(mPropertiesList, mBaseSpiritsList, mCheckedProperties, mCheckedBaseSpirits)
+                filterDialogFragment!!.addCheckboxes(mPropertiesList, mBaseSpiritsList, mTopCheckedBoxes, mBottomCheckedBoxes)
             }
         }
     }
 
     fun updateCheckedBoxes(checkedProperties: BooleanArray, checkedBaseSpirits: BooleanArray){
-        this.mCheckedProperties = checkedProperties
-        this.mCheckedBaseSpirits = checkedBaseSpirits
+        this.mTopCheckedBoxes = checkedProperties
+        this.mBottomCheckedBoxes = checkedBaseSpirits
         tempList = false
     }
 
     fun resetCheckedBoxes(){
-        mCheckedProperties = BooleanArray(mPropertiesList.size)
-        mCheckedBaseSpirits = BooleanArray(mBaseSpiritsList.size)
+        mTopCheckedBoxes = BooleanArray(mPropertiesList.size)
+        mBottomCheckedBoxes = BooleanArray(mBaseSpiritsList.size)
         initialize()
     }
 
     fun setTemporaryState(checkedProperties: BooleanArray, checkedBaseSpirits: BooleanArray){
-        mCheckedPropertiesTemp = checkedProperties
-        mCheckedBaseSpiritsTemp = checkedBaseSpirits
+        mTopCheckedBoxesTemp = checkedProperties
+        mBottomCheckedBoxesTemp = checkedBaseSpirits
         tempList = true
     }
 
     fun removeTemporaryState(){
-        mCheckedPropertiesTemp = BooleanArray(mPropertiesList.size)
-        mCheckedBaseSpiritsTemp = BooleanArray(mBaseSpiritsList.size)
+        mTopCheckedBoxesTemp = BooleanArray(mPropertiesList.size)
+        mBottomCheckedBoxesTemp = BooleanArray(mBaseSpiritsList.size)
         tempList = false
     }
 }
