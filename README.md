@@ -8,7 +8,7 @@ The name "Drinkerino" is nothing serious.
 
 I'm actively working on making the app better.
 
-Don't use the recipes. ;) I haven't tested any of them.
+I don't recommend using the recipes. I haven't tested any of them and I wasn't very serious while writing them.
 
 Feel free to come with suggestions.
 
