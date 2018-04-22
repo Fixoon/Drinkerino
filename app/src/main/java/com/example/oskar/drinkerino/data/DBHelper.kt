@@ -30,6 +30,7 @@ class DBHelper : SQLiteOpenHelper(MainApplication.getContext(), DB_NAME, null, 1
         } catch (e: SQLiteException) {
             //Database doesn't exist. Call "this.readableDatabase" to create Database
             this.readableDatabase
+            this.close()
         }
 
         return checkDB != null
