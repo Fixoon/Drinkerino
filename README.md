@@ -15,7 +15,7 @@ Feel free to come with suggestions.
 Thanks.
 
 ## Known problems:  
-Filter dialog doesn't display properly on devices with DPI level of 640 (i.e. Galaxy S(6-9) & LG G(4-6)) in landscape.
+Filter dialog doesn't display properly on devices with DPI level of 640 (i.e. Galaxy S(6-9) & LG G(4-6)) in landscape.  
 ~~The app doesn't work properly in Android P dp1. I'll fix it before Android P is released.~~ Fixed.
 
 ## Update (2018-04-20):  
