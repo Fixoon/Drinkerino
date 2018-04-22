@@ -69,6 +69,10 @@ class FilterDialogFragment : DialogFragment(), FilterDialogAction, FilterDialogC
     }
 
     override fun onPause() {
+        if(temporaryCheckBoxState) {
+            val checkedBoxes = getCheckedBoxes()
+            presenter!!.setTemporaryState(checkedBoxes[2] as BooleanArray, checkedBoxes[3] as BooleanArray)
+        }
         presenter!!.detachView()
         super.onPause()
     }
