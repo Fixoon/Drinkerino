@@ -1,22 +1,24 @@
 # Drinkerino
 
-This Android app was created for fun and for me to learn. It's my first time using Kotlin but not first time developing in Android.
+Hello. This is an Android app with drink recipes. I created it for fun, for me to learn and maybe show what I can do.
 
-Drinkerino is about drink recipes. The app has few features. It's very basic.
+I started coding it in Java but Android Studio 3.0 came a few days after I started with Kotlin support so I decided to try it out.
 
 The name "Drinkerino" is nothing serious.
 
-The app is not perfect, many things could probably be done better. I'll update the app sometimes when I feel like it
+I'm actively working on making the app better.
 
-The app doesn't work properly in Android P dp1. I'll fix it before Android P is released.
-
-Don't take the recipes seriously. I haven't tested any of them.
+I don't recommend using the recipes. I haven't tested any of them and I wasn't very serious while writing them.
 
 Feel free to come with suggestions.
 
 Thanks.
 
-Update (2018-04-20): 
+## Known problems:  
+Filter dialog doesn't display properly on devices with DPI level of 640 (i.e. Galaxy S(6-9) & LG G(4-6)) in landscape.  
+~~The app doesn't work properly in Android P dp1. I'll fix it before Android P is released.~~ Fixed.
+
+## Update (2018-04-20):  
 I have now switched to using MVP. I've also made changes so that MainFragment, LikesFragment and FilterDialogFragment now handles rotations properly.
 
-Known problems: Filter dialog doesn't display properly on devices with DPI level of 640 (i.e. Galaxy S(6-9) & LG G(4-6)) in landscape.
+
