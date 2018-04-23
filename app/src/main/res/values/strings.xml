@@ -4,6 +4,7 @@
     <string name="title_home">Drinkerino</string>
     <string name="title_liked">Gillade drinkar</string>
     <string name="title_settings">Inställningar</string>
+    <string name="title_recipe">Recept</string>
 
     <string name="navigation_home">Start</string>
     <string name="navigation_liked">Gillade</string>
