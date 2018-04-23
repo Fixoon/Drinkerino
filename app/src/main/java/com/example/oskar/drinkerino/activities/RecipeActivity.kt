@@ -34,6 +34,8 @@ class RecipeActivity : AppCompatActivity() {
 
         displayRecipe()
 
+        title = getString(R.string.title_recipe)
+
         return true
     }
 
@@ -63,7 +65,6 @@ class RecipeActivity : AppCompatActivity() {
     }
 
     private fun displayRecipe() {
-        title = recipe.name
 
         drinkName.text = recipe.name
 
