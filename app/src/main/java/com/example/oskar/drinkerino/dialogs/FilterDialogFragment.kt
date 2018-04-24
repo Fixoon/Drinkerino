@@ -33,8 +33,8 @@ class FilterDialogFragment : DialogFragment(), FilterDialogAction, FilterDialogC
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.dialog_filter, container)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.dialog_filter, container)
 
         temporaryCheckBoxState = true
 
@@ -56,7 +56,7 @@ class FilterDialogFragment : DialogFragment(), FilterDialogAction, FilterDialogC
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        activity.supportLoaderManager.initLoader(1003, null, this)
+        activity!!.supportLoaderManager.initLoader(1003, null, this)
     }
 
     override fun onResume() {
@@ -78,14 +78,14 @@ class FilterDialogFragment : DialogFragment(), FilterDialogAction, FilterDialogC
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<FilterDialogPresenter> {
-        return PresenterLoader(context, FilterDialogPresenter())
+        return PresenterLoader(context!!, FilterDialogPresenter())
     }
 
-    override fun onLoadFinished(loader: Loader<FilterDialogPresenter>?, data: FilterDialogPresenter?) {
+    override fun onLoadFinished(loader: Loader<FilterDialogPresenter>, data: FilterDialogPresenter?) {
         this.presenter = data
     }
 
-    override fun onLoaderReset(loader: Loader<FilterDialogPresenter>?) {
+    override fun onLoaderReset(loader: Loader<FilterDialogPresenter>) {
 
     }
 

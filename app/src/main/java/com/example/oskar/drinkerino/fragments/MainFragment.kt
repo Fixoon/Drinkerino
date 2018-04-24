@@ -30,10 +30,10 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction, Mai
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.setHasOptionsMenu(true)
-        activity.title = getString(R.string.title_home)
+        activity!!.title = getString(R.string.title_home)
 
         attachAdapter()
         addFilterDialog()
@@ -53,7 +53,7 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction, Mai
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        activity.supportLoaderManager.initLoader(1001, null, this)
+        activity!!.supportLoaderManager.initLoader(1001, null, this)
     }
 
     override fun onResume() {
@@ -67,14 +67,14 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction, Mai
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<MainPresenter> {
-        return PresenterLoader(context, MainPresenter())
+        return PresenterLoader(context!!, MainPresenter())
     }
 
-    override fun onLoadFinished(loader: Loader<MainPresenter>?, data: MainPresenter?) {
+    override fun onLoadFinished(loader: Loader<MainPresenter>, data: MainPresenter?) {
         this.presenter = data
     }
 
-    override fun onLoaderReset(loader: Loader<MainPresenter>?) {
+    override fun onLoaderReset(loader: Loader<MainPresenter>) {
         this.presenter = null
     }
 
@@ -92,7 +92,7 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction, Mai
     }
 
     override fun navigateToRecipe(drinkID: Int){
-        val intent = newIntent(activity, drinkID)
+        val intent = newIntent(activity!!, drinkID)
         startActivity(intent)
     }
 
@@ -103,7 +103,7 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction, Mai
     }
 
     private fun attachAdapter(){
-        adapter = DrinkAdapter(activity, ArrayList(), this)
+        adapter = DrinkAdapter(activity!!, ArrayList(), this)
         mainDrinkList.adapter = adapter
         mainDrinkList.setOnItemClickListener{parent, view, position, id ->
             presenter!!.onItemClicked(adapter.getItem(position))

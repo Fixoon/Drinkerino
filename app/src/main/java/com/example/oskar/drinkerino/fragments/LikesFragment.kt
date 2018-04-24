@@ -30,11 +30,11 @@ class LikesFragment : Fragment(), DrinkAdapterLikeAction, LikesContract.View, Lo
         return inflater.inflate(R.layout.fragment_likes, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity.title = getString(R.string.title_liked)
+        activity!!.title = getString(R.string.title_liked)
 
-        adapter = DrinkAdapter(activity, arrayListOf(), this)
+        adapter = DrinkAdapter(activity!!, arrayListOf(), this)
         likeDrinkList.adapter = adapter
         likeDrinkList.setOnItemClickListener { parent, view, position, id ->
             presenter!!.onItemClicked(adapter.getItem(position))
@@ -43,7 +43,7 @@ class LikesFragment : Fragment(), DrinkAdapterLikeAction, LikesContract.View, Lo
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        activity.supportLoaderManager.initLoader(1002, null, this)
+        activity!!.supportLoaderManager.initLoader(1002, null, this)
     }
 
     override fun onResume() {
@@ -57,14 +57,14 @@ class LikesFragment : Fragment(), DrinkAdapterLikeAction, LikesContract.View, Lo
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<LikesPresenter> {
-        return PresenterLoader(context, LikesPresenter())
+        return PresenterLoader(context!!, LikesPresenter())
     }
 
-    override fun onLoadFinished(loader: Loader<LikesPresenter>?, data: LikesPresenter?) {
+    override fun onLoadFinished(loader: Loader<LikesPresenter>, data: LikesPresenter?) {
         this.presenter = data
     }
 
-    override fun onLoaderReset(loader: Loader<LikesPresenter>?) {
+    override fun onLoaderReset(loader: Loader<LikesPresenter>) {
         this.presenter = null
     }
 
@@ -82,7 +82,7 @@ class LikesFragment : Fragment(), DrinkAdapterLikeAction, LikesContract.View, Lo
     }
 
     override fun navigateToRecipe(drinkID: Int){
-        val intent = newIntent(activity, drinkID)
+        val intent = newIntent(activity!!, drinkID)
         startActivityForResult(intent, 1)
     }
 
