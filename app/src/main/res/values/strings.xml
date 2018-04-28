@@ -39,6 +39,7 @@
     <string name="property_bitter">Besk</string>
     <string name="property_acidic">Syrlig</string>
     <string name="property_salt">Salt</string>
+    <string name="property_hot">Het</string>
 
     <string name="spirit_rum">Rom</string>
     <string name="spirit_vodka">Vodka</string>

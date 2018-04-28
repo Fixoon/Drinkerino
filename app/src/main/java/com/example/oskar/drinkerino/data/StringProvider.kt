@@ -11,7 +11,8 @@ class StringProvider {
                 globalContext.getString(R.string.property_sour),
                 globalContext.getString(R.string.property_bitter),
                 globalContext.getString(R.string.property_acidic),
-                globalContext.getString(R.string.property_salt))
+                globalContext.getString(R.string.property_salt),
+                globalContext.getString(R.string.property_hot))
     }
 
     fun getSpiritStrings() : Array<String>{
