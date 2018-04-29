@@ -43,6 +43,7 @@ class FilterDialogFragment : DialogFragment(), FilterDialogAction, FilterDialogC
 
         view.actionButton.setOnClickListener {
             val checkBoxes = getCheckedBoxes()
+            @Suppress("UNCHECKED_CAST")
             mCallback.filterClick(checkBoxes[0] as ArrayList<String>, checkBoxes[1] as ArrayList<String>, (gridViewBottom.adapter.getItem(5) as CheckBox).isChecked)
             presenter!!.updateCheckedBoxes(checkBoxes[2] as BooleanArray, checkBoxes[3] as BooleanArray)
             temporaryCheckBoxState = false
