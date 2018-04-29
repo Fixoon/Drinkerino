@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_likes.*
 class LikesFragment : Fragment(), DrinkAdapterLikeAction, LikesContract.View, LoaderManager.LoaderCallbacks<LikesPresenter> {
     private lateinit var adapter: DrinkAdapter
     private var presenter: LikesPresenter? = null
+    private var removedSnackbar: Snackbar? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_likes, container, false)
@@ -54,6 +55,13 @@ class LikesFragment : Fragment(), DrinkAdapterLikeAction, LikesContract.View, Lo
     override fun onPause() {
         presenter!!.detachView()
         super.onPause()
+    }
+
+    override fun onDestroy() {
+        if(removedSnackbar != null){
+            removedSnackbar!!.dismiss()
+        }
+        super.onDestroy()
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<LikesPresenter> {
@@ -91,11 +99,11 @@ class LikesFragment : Fragment(), DrinkAdapterLikeAction, LikesContract.View, Lo
 
         presenter!!.likeToggle(drink, position)
 
-        val snackbar = Snackbar.make(view!!,drink.name + " " + getString(R.string.snackbar_drink_removed), Snackbar.LENGTH_LONG)
-        snackbar.setAction(R.string.snackbar_drink_undo, {
+        removedSnackbar = Snackbar.make(view!!,drink.name + " " + getString(R.string.snackbar_drink_removed), Snackbar.LENGTH_LONG)
+        removedSnackbar!!.setAction(R.string.snackbar_drink_undo, {
             presenter!!.likeToggle(drink, position)
         })
-        snackbar.show()
+        removedSnackbar!!.show()
     }
 
     fun resetFragment() {
