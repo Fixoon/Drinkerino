@@ -68,6 +68,18 @@ class RecipeActivity : AppCompatActivity() {
 
         drinkName.text = recipe.name
 
+        var propString = ""
+
+        recipe.properties.forEachIndexed {index, p ->
+            propString += when (index) {
+                0 -> p.toLowerCase()
+                recipe.properties.count() - 1 -> " & " + p.toLowerCase()
+                else -> ", " + p.toLowerCase()
+            }
+        }
+
+        description.text = getString(R.string.recipe_description, propString, recipe.baseSpirit.toLowerCase())
+
         if (recipe.likeState == LikeState.LIKED) {
             menu.findItem(R.id.action_filter).icon = ContextCompat.getDrawable(this, R.drawable.ic_heart)
         }
