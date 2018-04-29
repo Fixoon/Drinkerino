@@ -1,6 +1,6 @@
 # Drinkerino
 
-Hello. This is an Android app with drink recipes. I created it for fun, for me to learn and maybe show what I can do.
+Hello. This is an Android app with drink recipes. I created it for fun, for me to learn and to show what I can do.
 
 I started coding it in Java but Android Studio 3.0 came a few days after I started with Kotlin support so I decided to try it out.
 
