@@ -13,6 +13,7 @@
     <string name="drink_ingredients">Ingredienser</string>
     <string name="drink_instructions">Instruktioner</string>
     <string name="drink_name">Drinknamn</string>
+    <string name="drink_description">Drinkbeskrivning</string>
 
     <string name="filter_header">Filtrera drinkar</string>
     <string name="filter_properties">Egenskaper</string>
@@ -47,4 +48,6 @@
     <string name="spirit_gin">Gin</string>
     <string name="spirit_whiskey">Whiskey</string>
     <string name="spirit_others">Övriga</string>
+
+    <string name="recipe_description">En %1$s %2$sdrink</string>
 </resources>
