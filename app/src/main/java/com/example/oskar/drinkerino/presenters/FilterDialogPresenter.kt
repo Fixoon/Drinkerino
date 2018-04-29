@@ -16,7 +16,7 @@ class FilterDialogPresenter : FilterDialogContract.Presenter, BasePresenter<Filt
     private var mTopCheckedBoxesTemp: BooleanArray = BooleanArray(mPropertiesList.size)
     private var mBottomCheckedBoxesTemp: BooleanArray = BooleanArray(mBaseSpiritsList.size)
 
-    var tempList = false
+    private var tempList = false
 
     override fun attachView(view: FilterDialogContract.View) {
         filterDialogFragment = view
