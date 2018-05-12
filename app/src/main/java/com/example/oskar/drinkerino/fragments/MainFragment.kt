@@ -3,11 +3,14 @@ package com.example.oskar.drinkerino.fragments
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.Loader
 import android.view.*
+import android.widget.TextView
 import com.example.oskar.drinkerino.R
 import com.example.oskar.drinkerino.activities.RecipeActivity
 import com.example.oskar.drinkerino.adapters.DrinkAdapter
@@ -37,6 +40,10 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction, Mai
 
         attachAdapter()
         addFilterDialog()
+
+        activeFilterCloseButton.setOnClickListener { view ->
+            resetFragment()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -100,6 +107,49 @@ class MainFragment : Fragment(), DrinkAdapterLikeAction, FilterDialogAction, Mai
                              baseSpiritsDialogCheckboxes: ArrayList<String>,
                              checkOther: Boolean) {
         presenter!!.onFilterClicked(propertiesDialogCheckboxes, baseSpiritsDialogCheckboxes, checkOther)
+    }
+
+    override fun setActiveFilter(properties: String?, baseSpirits: String?){
+        activeFilterLayout.visibility = View.VISIBLE
+        bottomLinearLayout.removeAllViews()
+        topLinearLayout.removeAllViews()
+
+        if(properties != null){
+            val propertiesTitleTextView = TextView(context)
+            propertiesTitleTextView.text = getString(R.string.active_filter_properties) + ": "
+            propertiesTitleTextView.setTextColor(Color.rgb(255, 255, 255))
+            propertiesTitleTextView.setTypeface(null, Typeface.BOLD)
+
+            val propertiesTextView = TextView(context)
+            propertiesTextView.text = properties + " "
+            propertiesTextView.setTextColor(Color.rgb(255, 255, 255))
+
+            topLinearLayout.addView(propertiesTitleTextView)
+            topLinearLayout.addView(propertiesTextView)
+        }
+        if(baseSpirits != null){
+            val baseSpiritTitleTextView = TextView(context)
+            baseSpiritTitleTextView.text = getString(R.string.active_filter_basespirit) + ": "
+            baseSpiritTitleTextView.setTextColor(Color.rgb(255, 255, 255))
+            baseSpiritTitleTextView.setTypeface(null, Typeface.BOLD)
+
+            val baseSpiritTextView = TextView(context)
+            baseSpiritTextView.text = baseSpirits
+            baseSpiritTextView.setTextColor(Color.rgb(255, 255, 255))
+
+            if(properties != null && properties.length + baseSpirits.length > 24){
+                bottomLinearLayout.addView(baseSpiritTitleTextView)
+                bottomLinearLayout.addView(baseSpiritTextView)
+            }else{
+                topLinearLayout.addView(baseSpiritTitleTextView)
+                topLinearLayout.addView(baseSpiritTextView)
+            }
+
+        }
+    }
+
+    override fun hideActiveFilter() {
+        activeFilterLayout.visibility = View.GONE
     }
 
     private fun attachAdapter(){

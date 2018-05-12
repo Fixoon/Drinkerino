@@ -8,6 +8,8 @@ interface MainContract {
         fun navigateToRecipe(drinkID: Int)
         fun showNoResultText()
         fun hideNoResultText()
+        fun setActiveFilter(properties: String?, baseSpirits: String?)
+        fun hideActiveFilter()
     }
 
     interface Presenter{
