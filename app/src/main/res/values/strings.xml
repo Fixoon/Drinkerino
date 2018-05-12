@@ -50,4 +50,8 @@
     <string name="spirit_others">Övriga</string>
 
     <string name="recipe_description">En %1$s %2$sdrink</string>
+
+    <string name="active_filter_properties">Egenskaper</string>
+    <string name="active_filter_basespirit">Drinkbas</string>
+    <string name="active_filter_title">Filtrering</string>
 </resources>
