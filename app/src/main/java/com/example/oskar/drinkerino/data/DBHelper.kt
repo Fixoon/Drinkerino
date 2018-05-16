@@ -50,13 +50,6 @@ class DBHelper : SQLiteOpenHelper(MainApplication.getContext(), DB_NAME, null, 1
                 length = assetFile.read(buffer)
             }
 
-            //These files gets created on Android P Dev 1 and messes with accessing the database
-            //that gets copied here so they need to be deleted.
-            val walDBFile = File(DB_PATH + DB_NAME + "-wal")
-            val shmDBFile = File(DB_PATH + DB_NAME + "-shm")
-            walDBFile.delete()
-            shmDBFile.delete()
-
             outputFile.flush()
             outputFile.close()
             assetFile.close()
